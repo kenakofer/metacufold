@@ -1,0 +1,5 @@
+# This file should get renamed to config.py and filled out with your API key
+# Get your API key from https://manifold.markets/profile
+
+class Config:
+    API_KEY = "YOUR API KEY HERE"

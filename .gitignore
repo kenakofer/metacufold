@@ -1,3 +1,10 @@
+# API_KEY is set in the config.py file
+config.py
+
+# Ignore the cache and logs directories
+cache/
+logs/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
