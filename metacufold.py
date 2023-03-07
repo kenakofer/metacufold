@@ -1,17 +1,15 @@
 #!/usr/bin/env python3
-
-from config import Config as C;
-from manifold import Manifold;
-
 import sys
 import os
 import argparse
 
+from config import Config as C
+from manifold import Manifold
+from metaculus import Metaculus
+
 def sync():
-    markets = Manifold.fetch_filtered_metaculus_markets_json()
-    for market in markets:
-        print(market["question"] + " " + market["metaculus_link"])
-    print(str(len(markets)) + " markets found")
+    get_markets_sorted_by_difference()
+
 
 def bet_once():
     print("bet_once...")
@@ -20,6 +18,32 @@ def bet_once():
 def help():
     print("help...")
     print("API Key: " + C.API_KEY)
+
+
+def get_markets_sorted_by_difference():
+    markets = Manifold.fetch_filtered_metaculus_markets_json()
+    # for market in markets:
+        # print(market["question"] + " " + market["metaculus_link"])
+    print(str(len(markets)) + " markets found")
+
+    # Add metaculus probability to markets
+    for market in markets:
+        market.update({"metaculus_probability": Metaculus.fetch_market_probability(market["metaculus_id"])})
+        market.update({"metaculus_predictions": Metaculus.fetch_market_prediction_count(market["metaculus_id"])})
+
+    # Filter out markets that aren't binary on the Metaculus side
+    markets = [market for market in markets if Metaculus.is_binary(market["metaculus_id"])]
+
+    # Sort markets by difference between manifold and metaculus probability
+    markets.sort(key=lambda market: abs(market["probability"] - market["metaculus_probability"]), reverse=True)
+
+    # Print out the top ten with their urls and probabilities
+    for market in markets[:10]:
+        print(market["question"])
+        print( "  " + str(market['metaculus_probability']) + " (" + str(market['metaculus_predictions']) + ") " + market["metaculus_link"])
+        print( "  " + str(market["probability"]) + " (" + str(market['totalLiquidity']) + ") " + str(market["url"]))
+
+    return markets
 
 
 # For the main method, check arguments to see function to run

@@ -8,8 +8,9 @@ if not os.path.exists("cache"):
 # Create the cache
 
 URLS_EXPIRE_AFTER = {
-    'manifold.markets/api/v0/group/by-id/': 3600,
-    'manifold.markets/api/v0/market/':      3600,
+    'manifold.markets/api/v0/group/by-id/':     3600,
+    'manifold.markets/api/v0/market/':          3 * 3600,
+    'www.metaculus.com/api2/questions/':        3600,
 }
 session = requests_cache.CachedSession('cache/requests_cache', backend='sqlite', expire_after=3600, urls_expire_after=URLS_EXPIRE_AFTER)
 
