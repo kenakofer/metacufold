@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 
 from config import Config as C;
+from manifold import Manifold;
 
 import sys
 import os
 import argparse
 
 def sync():
-    print("Syncing...")
+    markets = Manifold.fetch_filtered_metaculus_markets_json()
+    for market in markets:
+        print(market["question"] + " " + market["metaculus_link"])
+    print(str(len(markets)) + " markets found")
 
 def bet_once():
     print("bet_once...")
@@ -16,6 +20,7 @@ def bet_once():
 def help():
     print("help...")
     print("API Key: " + C.API_KEY)
+
 
 # For the main method, check arguments to see function to run
 if __name__ == "__main__":
