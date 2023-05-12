@@ -11,6 +11,12 @@ class Manifold:
         return requests.get(Manifold.METACULUS_GROUP_MARKETS_URL).json()
 
 
+    def get_ignore_markets_from_file():
+        """Get a list of markets to ignore"""
+        with open("ignore_markets.txt", "r") as file:
+            return [line.strip() for line in file.readlines()]
+
+
     def fetch_filtered_metaculus_markets_json():
         """Get a list of all markets"""
         markets = [
@@ -35,6 +41,10 @@ class Manifold:
 
         # Filter out markets that don't have a Metaculus link
         markets = [market for market in markets if market["metaculus_link"] is not None]
+
+        # Filter out markets whose url is in the ignore file
+        ignore_markets = Manifold.get_ignore_markets_from_file()
+        markets = [market for market in markets if market["url"] not in ignore_markets]
 
         # Get just the id from the metaculus link
         for market in markets:

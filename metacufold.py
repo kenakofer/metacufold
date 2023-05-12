@@ -29,7 +29,7 @@ def get_markets_sorted_by_difference():
     # Add metaculus probability to markets
     for market in markets:
         market.update({"metaculus_probability": Metaculus.fetch_market_probability(market["metaculus_id"])})
-        market.update({"metaculus_predictions": Metaculus.fetch_market_prediction_count(market["metaculus_id"])})
+        market.update({"metaculus_predictions": Metaculus.fetch_market_size_indicator(market["metaculus_id"])})
 
     # Filter out markets that aren't binary on the Metaculus side
     markets = [market for market in markets if Metaculus.is_binary(market["metaculus_id"])]
@@ -38,10 +38,12 @@ def get_markets_sorted_by_difference():
     markets.sort(key=lambda market: abs(market["probability"] - market["metaculus_probability"]), reverse=True)
 
     # Print out the top ten with their urls and probabilities
-    for market in markets[:10]:
+    for market in markets[:20]:
+        print()
         print(market["question"])
         print( "  " + str(market['metaculus_probability']) + " (" + str(market['metaculus_predictions']) + ") " + market["metaculus_link"])
         print( "  " + str(market["probability"]) + " (" + str(market['totalLiquidity']) + ") " + str(market["url"]))
+
 
     return markets
 
