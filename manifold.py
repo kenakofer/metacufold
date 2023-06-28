@@ -11,6 +11,7 @@ class Manifold:
         self._slug = str(re.search(r"/([^/]+)$", url).group(1))
         self._market_id = str(market_id)
         self._details = None
+        self._summary = None
 
     def market_id(self):
         if not self._market_id:

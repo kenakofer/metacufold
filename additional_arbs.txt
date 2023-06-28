@@ -11,7 +11,7 @@ https://manifold.markets/ACXBot/9-will-a-nuclear-weapon-be-used-in https://www.m
 https://manifold.markets/ACXBot/10-will-china-launch-a-fullscale-in https://www.metaculus.com/questions/13938/chinese-invasion-of-taiwan-in-2023/
 https://manifold.markets/ACXBot/12-will-ali-khameini-cease-to-be-su https://www.metaculus.com/questions/13987/ali-khameini-no-longer-supreme-leader/
 https://manifold.markets/ACXBot/13-will-any-other-war-have-more-cas https://www.metaculus.com/questions/14032/2023-war-casualties-vs-russiaukraine/
-https://manifold.markets/ACXBot/14-will-there-be-more-than-25-milli 
+https://manifold.markets/ACXBot/14-will-there-be-more-than-25-milli https://www.metaculus.com/questions/13990/covid-cases-in-china-in-2023/ 
 https://manifold.markets/ACXBot/15-at-the-end-of-2023-will-predicti https://www.metaculus.com/questions/14248/biden-nomination-according-to-markets/
 https://manifold.markets/ACXBot/16-at-the-end-of-2023-will-predicti https://www.metaculus.com/questions/14247/newsom-nomination-according-to-markets/
 https://manifold.markets/ACXBot/17-at-the-end-of-2023-will-predicti https://www.metaculus.com/questions/14228/trump-nomination-according-to-markets/
@@ -41,7 +41,7 @@ https://manifold.markets/ACXBot/43-will-a-new-version-of-covid-be-s https://www.
 https://manifold.markets/ACXBot/44-will-google-meta-amazon-or-apple https://www.metaculus.com/questions/14274/fang-release-of-ar-headset-in-2023/
 https://manifold.markets/ACXBot/45-will-an-ordinary-person-be-able https://www.metaculus.com/questions/14275/self-driving-taxi-from-oakland-sf-jan-1-2024/
 https://manifold.markets/ACXBot/46-will-a-cultured-meat-product-be https://www.metaculus.com/questions/14276/cultured-meat-for-sale-in-us/
-https://manifold.markets/ACXBot/47-will-a-successful-deepfake-attem https://www.metaculus.com/questions/14279/ai-programming-challenge-in-2023/
+https://manifold.markets/ACXBot/47-will-a-successful-deepfake-attem https://www.metaculus.com/questions/14277/deepfake-attempt-in-major-news-in-2023/
 https://manifold.markets/ACXBot/48-will-who-declare-a-new-global-he https://www.metaculus.com/questions/14278/new-who-global-health-emergency-in-2023/
 https://manifold.markets/ACXBot/49-will-ai-win-a-programming-compet https://www.metaculus.com/questions/14279/ai-programming-challenge-in-2023/
 https://manifold.markets/ACXBot/50-will-someone-release-dalle-but-f https://www.metaculus.com/questions/14280/ai-video-generation-model-in-2023/
