@@ -6,6 +6,7 @@ import argparse
 from config import Config as C
 from manifold import Manifold
 from metaculus import Metaculus
+from metaculus_bot_group import MetaculusBotGroup
 
 def sync():
     get_markets_sorted_by_difference()
@@ -21,37 +22,21 @@ def help():
 
 
 def get_markets_sorted_by_difference():
-    markets = Manifold.fetch_filtered_metaculus_markets_json()
-    # for market in markets:
-        # print(market["question"] + " " + market["metaculus_link"])
-    print(str(len(markets)) + " markets found")
-
-    # Add metaculus probability to markets
-    for market in markets:
-        market.update({"metaculus_probability": Metaculus.fetch_market_probability(market["metaculus_id"])})
-        market.update({"metaculus_predictions": Metaculus.fetch_market_size_indicator(market["metaculus_id"])})
-
-    # Filter out markets that aren't binary on the Metaculus side
-    markets = [market for market in markets if Metaculus.is_binary(market["metaculus_id"])]
-
-    # Filter out markets that aren't open on the Metaculus side
-    markets = [market for market in markets if Metaculus.is_open(market["metaculus_id"])]
-
-    # Filter out markets with None metaculus probability
-    markets = [market for market in markets if market["metaculus_probability"] is not None]
+    market_pairs = MetaculusBotGroup.filtered_metaculus_arb_pairs()
+    print(str(len(market_pairs)) + " market pairs found in Manifold's MetaculusBot group")
 
     # Sort markets by difference between manifold and metaculus probability
-    markets.sort(key=lambda market: abs(market["probability"] - market["metaculus_probability"]), reverse=True)
+    market_pairs.sort(key=lambda pair: abs(pair[0].probability() - pair[1].probability()), reverse=True)
 
     # Print out the top ten with their urls and probabilities
-    for market in markets[:20]:
+    for pair in market_pairs[:20]:
         print()
-        print(market["question"])
-        print( "  " + str(market['metaculus_probability']) + " (" + str(market['metaculus_predictions']) + ") " + market["metaculus_link"])
-        print( "  " + str(market["probability"]) + " (" + str(market['totalLiquidity']) + ") " + str(market["url"]))
+        print(pair[0].title())
+        for m in pair:
+            print( "  " + str(m.probability()) + " (" + str(m.size()) + ") " + m.url())
 
 
-    return markets
+    return market_pairs
 
 
 # For the main method, check arguments to see function to run
