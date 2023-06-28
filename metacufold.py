@@ -34,6 +34,12 @@ def get_markets_sorted_by_difference():
     # Filter out markets that aren't binary on the Metaculus side
     markets = [market for market in markets if Metaculus.is_binary(market["metaculus_id"])]
 
+    # Filter out markets that aren't open on the Metaculus side
+    markets = [market for market in markets if Metaculus.is_open(market["metaculus_id"])]
+
+    # Filter out markets with None metaculus probability
+    markets = [market for market in markets if market["metaculus_probability"] is not None]
+
     # Sort markets by difference between manifold and metaculus probability
     markets.sort(key=lambda market: abs(market["probability"] - market["metaculus_probability"]), reverse=True)
 

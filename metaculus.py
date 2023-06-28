@@ -13,7 +13,7 @@ class Metaculus:
         if "q2" in full_community_prediction:
             return full_community_prediction["q2"]
         else:
-            return -100
+            return None
 
     def fetch_market_size_indicator(market_id):
         details = Metaculus.fetch_market_details(market_id)
@@ -26,3 +26,8 @@ class Metaculus:
             return Metaculus.fetch_market_details(market_id)["possibilities"]["type"] == "binary"
         if "type" in details:
             return details["type"] == "group"
+
+    def is_open(market_id):
+        details = Metaculus.fetch_market_details(market_id)
+        # Check for "OPEN" active_state
+        return "active_state" in details and details["active_state"] == "OPEN"
