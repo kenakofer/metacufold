@@ -7,6 +7,7 @@ from config import Config as C
 from manifold import Manifold
 from metaculus import Metaculus
 from metaculus_bot_group import MetaculusBotGroup
+from functools import reduce
 
 def sync():
     get_markets_sorted_by_difference()
@@ -42,6 +43,21 @@ def arbs_from_file():
     print("Adding " + str(len(additional_arbs)) + " arbs from additional_arbs.txt")
     return additional_arbs
 
+def arb_score(markets):
+    """
+    Returns a score for a given arb, which is based on the difference in probabilities and the size of the markets.
+    """
+    
+    # Sort the markets by probabilily
+    markets.sort(key=lambda m: m.probability())
+
+    # Size score is the product of the sizes of the markets, root the number of markets
+    size_score = reduce(lambda x, y: x * y, [m.size() for m in markets], 1)
+    size_score **= (1 / len(markets))
+
+    return int(size_score * abs(markets[0].probability() - markets[1].probability()))
+    
+
 
 def get_markets_sorted_by_difference():
     market_pairs = MetaculusBotGroup.filtered_metaculus_arb_pairs()
@@ -49,12 +65,12 @@ def get_markets_sorted_by_difference():
     market_pairs += arbs_from_file()
 
     # Sort markets by difference between manifold and metaculus probability
-    market_pairs.sort(key=lambda pair: abs(pair[0].probability() - pair[1].probability()), reverse=True)
+    market_pairs.sort(key=lambda pair: arb_score(pair), reverse=True)
 
     # Print out the top ten with their urls and probabilities
     for pair in market_pairs[:20]:
         print()
-        print(pair[0].title())
+        print(pair[0].title() + " (Arb score: " + str(arb_score(pair)) + ")")
         for m in pair:
             print( "  " + str(m.probability()) + " (" + str(m.size()) + ") " + m.url())
 
