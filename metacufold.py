@@ -55,7 +55,15 @@ def arb_score(markets):
     size_score = reduce(lambda x, y: x * y, [m.size() for m in markets], 1)
     size_score **= (1 / len(markets))
 
-    return int(size_score * abs(markets[0].probability() - markets[1].probability()))
+    bound = lambda x: min(max(x, 0.005), 0.995)
+
+    lower = bound(markets[0].probability())
+    upper = bound(markets[-1].probability())
+
+    spread_score = (upper - lower)
+    edginess_score = 1 / (upper * lower * (1 - upper) * (1 - lower))
+
+    return int(size_score**2 * spread_score**3 * edginess_score / 1000)
     
 
 
