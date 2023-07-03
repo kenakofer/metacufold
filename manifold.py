@@ -1,5 +1,6 @@
 import req as requests
 from time import time
+from datetime import datetime
 import re
 
 class Manifold:
@@ -36,6 +37,10 @@ class Manifold:
 
     def size(self):
         return self.details()['totalLiquidity']
+
+    def close_time(self):
+        # Close time is in milliseconds since the epoch, convert to datetime
+        return datetime.fromtimestamp(self.details()["closeTime"] / 1000)
 
     def is_binary(self):
         return self.details()["outcomeType"].startswith("BINARY")

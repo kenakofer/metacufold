@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import os
+from datetime import datetime
 import argparse
 
 from config import Config as C
@@ -63,7 +64,15 @@ def arb_score(markets):
     spread_score = (upper - lower)
     edginess_score = 1 / (upper * lower * (1 - upper) * (1 - lower))
 
-    return int(size_score**2 * spread_score**3 * edginess_score / 1000)
+    # Immanence score (if it closes sooner, it's better)
+    immanence_score = 3600 * 24 * 365 / (markets[0].close_time() - datetime.now()).total_seconds()
+    
+
+    print(size_score, spread_score, edginess_score, immanence_score)
+
+    return size_score * spread_score**3 * edginess_score * immanence_score**.5
+
+
     
 
 
@@ -78,10 +87,12 @@ def get_markets_sorted_by_difference():
     # Print out the top ten with their urls and probabilities
     for pair in market_pairs[:20]:
         print()
-        print(pair[0].title() + " (Arb score: " + str(arb_score(pair)) + ")")
+        print(pair[0].title() + " (Arb score: " + str(int(arb_score(pair))) + ")")
         for m in pair:
             print( "  " + str(m.probability()) + " (" + str(m.size()) + ") " + m.url())
+            print( "    " + str((m.close_time() - datetime.now()).days) + " days till close")
 
+        print()
 
     return market_pairs
 

@@ -1,4 +1,5 @@
 import req as requests
+from datetime import datetime
 import re
 
 class Metaculus:
@@ -35,6 +36,10 @@ class Metaculus:
 
     def size(self):
         return self.details()["number_of_forecasters"]
+
+    def close_time(self):
+        # Close time is for example "2031-01-01T00:00:00Z", convert to datetime
+        return datetime.fromisoformat(self.details()["close_time"][:-1])
 
     def is_binary(self):
         deets = self.details()
