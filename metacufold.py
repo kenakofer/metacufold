@@ -3,12 +3,14 @@ import sys
 import os
 from datetime import datetime
 import argparse
+from functools import reduce
 
 from config import Config as C
 from manifold import Manifold
 from metaculus import Metaculus
 from metaculus_bot_group import MetaculusBotGroup
-from functools import reduce
+from printing import print_arb
+
 
 def sync():
     get_markets_sorted_by_difference()
@@ -68,12 +70,10 @@ def arb_score(markets):
     immanence_score = 3600 * 24 * 365 / (markets[0].close_time() - datetime.now()).total_seconds()
     
 
-    print(size_score, spread_score, edginess_score, immanence_score)
+    #print(size_score, spread_score, edginess_score, immanence_score)
 
     return size_score * spread_score**3 * edginess_score * immanence_score**.5
 
-
-    
 
 
 def get_markets_sorted_by_difference():
@@ -86,13 +86,7 @@ def get_markets_sorted_by_difference():
 
     # Print out the top ten with their urls and probabilities
     for pair in market_pairs[:20]:
-        print()
-        print(pair[0].title() + " (Arb score: " + str(int(arb_score(pair))) + ")")
-        for m in pair:
-            print( "  " + str(m.probability()) + " (" + str(m.size()) + ") " + m.url())
-            print( "    " + str((m.close_time() - datetime.now()).days) + " days till close")
-
-        print()
+        print_arb(pair[0].title(), pair, arb_score(pair))
 
     return market_pairs
 
