@@ -1,5 +1,7 @@
 from datetime import datetime
 from os import get_terminal_size
+import sys
+import platform
 from metaculus import Metaculus
 from manifold import Manifold
 
@@ -16,9 +18,27 @@ FAIL = '\033[91m'
 ENDC = '\033[0m'
 BOLD = '\033[1m'
 UNDERLINE = '\033[4m'
-
 GREEN_BACK = '\033[42m'
 BLUE_BACK = '\033[44m'
+
+if hasattr(sys.stderr, "isatty") and sys.stderr.isatty():
+    if platform.system() == "Windows":
+        ## Delete all colors
+        HEADER = ''
+        OKBLUE = ''
+        GREEN = ''
+        WHITE = ''
+        BLACK = ''
+        RED = ''
+        OKCYAN = ''
+        OKGREEN = ''
+        WARNING = ''
+        FAIL = ''
+        ENDC = ''
+        BOLD = ''
+        UNDERLINE = ''
+        GREEN_BACK = ''
+        BLUE_BACK = ''
 
 
 def pretty_percent(prob):
