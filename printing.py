@@ -4,6 +4,7 @@ import sys
 import platform
 from metaculus import Metaculus
 from manifold import Manifold
+from config import Config as C
 
 HEADER = '\033[95m'
 OKBLUE = '\033[94m'
@@ -63,7 +64,7 @@ def print_arb(title, arb, arb_score):
             ENDC,
             "(" + str((m.close_time() - datetime.now()).days) + " days)",
             GREEN_BACK + BLACK if isinstance(m, Metaculus) else "",
-            BLUE_BACK + WHITE if isinstance(m, Manifold) else "",
+            "Pos: " + str(int(m.user_position_shares(C.USERNAME)))+ " " + BLUE_BACK + WHITE if isinstance(m, Manifold) else "",
             m.url(),
             ENDC))
 

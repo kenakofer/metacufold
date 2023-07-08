@@ -62,5 +62,9 @@ class Metaculus:
             return None
         return str(match.group(0))
 
+    def user_position_shares(self, username, force_refresh=False):
+        # Not supported, default 0
+        return 0
+
     def __str__(self):
         return self.title() + " (" + self.url() + ")"

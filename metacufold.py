@@ -11,6 +11,7 @@ from metaculus import Metaculus
 from metaculus_bot_group import MetaculusBotGroup
 from printing import print_arb
 
+NOVELTY_WEIGHT = 2.0
 
 def sync():
     get_markets_sorted_by_difference()
@@ -68,11 +69,22 @@ def arb_score(markets):
 
     # Immanence score (if it closes sooner, it's better)
     immanence_score = 3600 * 24 * 365 / (markets[0].close_time() - datetime.now()).total_seconds()
+
+    # Position score: if I'm holding a Manifold position, but Metaculus is the other way, we want to know about that and probably sell the position.
+    position_score = 1
+    if spread_score > 2:
+        lower_shares = markets[0].user_position_shares(C.USERNAME) 
+        upper_shares = markets[-1].user_position_shares(C.USERNAME)
+        if lower_shares < 0 or upper_shares > 0:
+            position_score = 10000
+        elif lower_shares == 0 and upper_shares == 0:
+            position_score = NOVELTY_WEIGHT
+
     
 
     #print(size_score, spread_score, edginess_score, immanence_score)
 
-    return size_score * spread_score**3 * edginess_score * immanence_score**.5
+    return size_score * spread_score**3 * edginess_score * immanence_score**.5 * position_score
 
 
 

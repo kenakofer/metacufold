@@ -12,6 +12,7 @@ class Manifold:
         self._slug = str(re.search(r"/([^/]+)$", url).group(1))
         self._market_id = str(market_id)
         self._details = None
+        self._all_positions = None
         self._summary = None
 
     def market_id(self):
@@ -28,6 +29,22 @@ class Manifold:
         if not self._details:
             self._details = requests.get("https://manifold.markets/api/v0/market/" + self.market_id()).json()
         return self._details
+
+    def user_position_shares(self, username, force_refresh=False):
+        if not self._all_positions or force_refresh:
+            self._all_positions = requests.get("https://manifold.markets/api/v0/market/" + self.market_id() + "/positions", invalidate_cache=force_refresh).json()
+            if not self._all_positions:
+                print("Error: Could not get position for market " + self.market_id())
+                return 0
+        for position in self._all_positions:
+            if position['userName'] == username:
+                totalShares = 0
+                if 'YES' in position['totalShares']:
+                    totalShares += position['totalShares']['YES']
+                if 'NO' in position['totalShares']:
+                    totalShares -= position['totalShares']['NO']
+                return totalShares
+        return 0
 
     def title(self):
         return self.details()['question']
