@@ -1,9 +1,10 @@
 import req as requests
+from prediction_site import PredictionSite
 from time import time
 from datetime import datetime
 import re
 
-class Manifold:
+class Manifold(PredictionSite):
 
     def __init__(self, url, market_id=""):
         self._url = url
@@ -21,9 +22,6 @@ class Manifold:
                 self._summary = requests.get("https://manifold.markets/api/v0/slug/" + self._slug).json()
             self._market_id = str(self._summary['id'])
         return self._market_id
-
-    def url(self):
-        return self._url
 
     def details(self):
         if not self._details:
@@ -64,6 +62,3 @@ class Manifold:
 
     def is_open(self):
         return self.details()["closeTime"] > int(time()) * 1000
-
-    def __str__(self):
-        return self.title() + " (" + self.url() + ")"

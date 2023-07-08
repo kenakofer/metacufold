@@ -1,18 +1,13 @@
 import req as requests
 from datetime import datetime
+from prediction_site import PredictionSite
 import re
 
-class Metaculus:
+class Metaculus(PredictionSite):
     def __init__(self, url):
         self._url = url
         self._market_id = str(re.search(r"questions/(\d+)", url).group(1))
         self._details = None
-
-    def url(self):
-        return self._url
-
-    def market_id(self):
-        return self._market_id
 
     def details(self):
         if not self._details:
@@ -53,7 +48,7 @@ class Metaculus:
         # Check for "OPEN" active_state
         return "active_state" in deets and deets["active_state"] == "OPEN"
 
-    def market_link(string): 
+    def market_link(string):
         string = string.replace("/embed/", "/")
         # replace all // with / unless in https://
         string = re.sub(r"(?<!https:)//", "/", string)
@@ -65,6 +60,3 @@ class Metaculus:
     def user_position_shares(self, username, force_refresh=False):
         # Not supported, default 0
         return 0
-
-    def __str__(self):
-        return self.title() + " (" + self.url() + ")"
