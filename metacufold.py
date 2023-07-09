@@ -8,6 +8,7 @@ from functools import reduce
 from config import Config as C
 from manifold import Manifold
 from metaculus import Metaculus
+from futuur import Futuur
 from metaculus_bot_group import MetaculusBotGroup
 from printing import print_arb
 
@@ -30,6 +31,8 @@ def url_to_market(url):
         return Metaculus(url)
     elif "manifold.markets" in url:
         return Manifold(url)
+    elif "futuur.com" in url:
+        return Futuur(url)
     else:
         raise Exception("Unknown URL: " + url)
 
@@ -40,8 +43,8 @@ def arbs_from_file():
     with open("additional_arbs.txt", "r") as file:
         additional_arbs = [
             list(map(url_to_market, line.strip().split(" ")))
-            for line in file.readlines() 
-            if line.strip() != "" 
+            for line in file.readlines()
+            if line.strip() != ""
                 and not line.strip().startswith("#")
         ]
     print("Adding " + str(len(additional_arbs)) + " arbs from additional_arbs.txt")
@@ -51,7 +54,7 @@ def arb_score(markets):
     """
     Returns a score for a given arb, which is based on the difference in probabilities and the size of the markets.
     """
-    
+
     # Sort the markets by probabilily
     markets.sort(key=lambda m: m.probability())
 
@@ -80,7 +83,7 @@ def arb_score(markets):
         elif lower_shares == 0 and upper_shares == 0:
             position_score = NOVELTY_WEIGHT
 
-    
+
 
     #print(size_score, spread_score, edginess_score, immanence_score)
 
