@@ -1,3 +1,4 @@
+from colored import Fore, Back, Style
 import req as requests
 from datetime import datetime
 from prediction_site import PredictionSite
@@ -57,6 +58,11 @@ class Metaculus(PredictionSite):
             return None
         return str(match.group(0))
 
-    def user_position_shares(self, username, force_refresh=False):
+    def user_position_shares(self, force_refresh=False):
         # Not supported, default 0
         return 0
+
+
+    def color(self, text):
+        # Green back, black text
+        return Back.GREEN + Fore.BLACK + text + Style.reset

@@ -1,7 +1,9 @@
+from colored import Fore, Back, Style
 import req as requests
 from prediction_site import PredictionSite
 from time import time
 from datetime import datetime
+from config import Config as C
 import re
 
 class Manifold(PredictionSite):
@@ -28,7 +30,8 @@ class Manifold(PredictionSite):
             self._details = requests.get("https://manifold.markets/api/v0/market/" + self.market_id()).json()
         return self._details
 
-    def user_position_shares(self, username, force_refresh=False):
+    def user_position_shares(self, force_refresh=False):
+        username = C.MANIFOLD_USERNAME
         if not self._all_positions or force_refresh:
             self._all_positions = requests.get("https://manifold.markets/api/v0/market/" + self.market_id() + "/positions", invalidate_cache=force_refresh).json()
             if not self._all_positions:
@@ -62,3 +65,7 @@ class Manifold(PredictionSite):
 
     def is_open(self):
         return self.details()["closeTime"] > int(time()) * 1000
+
+    def color(self, text):
+        # Blue back, white text
+        return Back.BLUE + Fore.WHITE + text + Style.reset

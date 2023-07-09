@@ -1,5 +1,7 @@
 # Kenan added
-.swp
+*.swp
+TODO.md
+
 # API_KEY is set in the config.py file
 config.py
 

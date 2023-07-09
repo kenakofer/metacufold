@@ -1,46 +1,10 @@
+from colored import Fore, Back, Style
 from datetime import datetime
 from os import get_terminal_size
 import sys
 import platform
 from metaculus import Metaculus
 from manifold import Manifold
-from config import Config as C
-
-HEADER = '\033[95m'
-OKBLUE = '\033[94m'
-GREEN = '\033[32m'
-WHITE = '\033[37m'
-BLACK = '\033[30m'
-RED = '\033[31m'
-OKCYAN = '\033[96m'
-OKGREEN = '\033[92m'
-WARNING = '\033[93m'
-FAIL = '\033[91m'
-ENDC = '\033[0m'
-BOLD = '\033[1m'
-UNDERLINE = '\033[4m'
-GREEN_BACK = '\033[42m'
-BLUE_BACK = '\033[44m'
-
-if hasattr(sys.stderr, "isatty") and sys.stderr.isatty():
-    if platform.system() == "Windows":
-        ## Delete all colors
-        HEADER = ''
-        OKBLUE = ''
-        GREEN = ''
-        WHITE = ''
-        BLACK = ''
-        RED = ''
-        OKCYAN = ''
-        OKGREEN = ''
-        WARNING = ''
-        FAIL = ''
-        ENDC = ''
-        BOLD = ''
-        UNDERLINE = ''
-        GREEN_BACK = ''
-        BLUE_BACK = ''
-
 
 def pretty_percent(prob):
     if prob < .02 or prob > .98:
@@ -57,15 +21,12 @@ def print_arb(title, arb, arb_score):
     print()
     sorted_arb = sorted(arb, key=lambda m: m.probability(), reverse=True)
     for m in sorted_arb:
-        print (" {:<0}{:<0}{:<4}{:<0} {:<10} {:<0}{:<0}{:<10}{:<0}".format(
-            BOLD + GREEN if m is sorted_arb[0] else "",
-            BOLD + RED if m is sorted_arb[-1] else "",
+        print (" {:<0}{:<0}{:<4}{:<0} {:<10} {:<11}{:<10}{:<0}".format(
+            Fore.GREEN + Style.BOLD if m is sorted_arb[0] else "",
+            Fore.RED + Style.BOLD if m is sorted_arb[-1] else "",
             pretty_percent(m.probability()),
-            ENDC,
+            Style.reset,
             "(" + str((m.close_time() - datetime.now()).days) + " days)",
-            GREEN_BACK + BLACK if isinstance(m, Metaculus) else "",
-            "Pos: " + str(int(m.user_position_shares(C.USERNAME)))+ " " + BLUE_BACK + WHITE if isinstance(m, Manifold) else "",
-            m.url(),
-            ENDC))
-
-
+            "Pos: " + str(int(m.user_position_shares()))+ " " if m.user_position_shares() != 0 else "",
+            m.color(m.url()),
+            Style.reset))

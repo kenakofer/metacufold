@@ -73,8 +73,8 @@ def arb_score(markets):
     # Position score: if I'm holding a Manifold position, but Metaculus is the other way, we want to know about that and probably sell the position.
     position_score = 1
     if spread_score > 2:
-        lower_shares = markets[0].user_position_shares(C.USERNAME) 
-        upper_shares = markets[-1].user_position_shares(C.USERNAME)
+        lower_shares = markets[0].user_position_shares(C.MANIFOLD_USERNAME)
+        upper_shares = markets[-1].user_position_shares(C.MANIFOLD_USERNAME)
         if lower_shares < 0 or upper_shares > 0:
             position_score = 10000
         elif lower_shares == 0 and upper_shares == 0:

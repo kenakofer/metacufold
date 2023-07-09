@@ -5,6 +5,9 @@ class PredictionSite:
     def url(self):
         return self._url
 
+    def color(self, text):
+        raise NotImplementedError("Inheriting class must implement this")
+
     def market_id(self):
         return self._market_id
 
