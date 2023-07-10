@@ -6,6 +6,9 @@ from prediction_site import PredictionSite
 import json
 import re
 
+from colorama import just_fix_windows_console
+just_fix_windows_console()
+
 """
 Withdrawl fee is .004 ETH which is ~$5.41
 Long enough on the platform and this should become insubstantial.

@@ -6,6 +6,9 @@ from datetime import datetime
 from config import Config as C
 import re
 
+from colorama import just_fix_windows_console
+just_fix_windows_console()
+
 class Manifold(PredictionSite):
 
     def __init__(self, url, market_id=""):

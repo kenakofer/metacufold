@@ -4,6 +4,9 @@ from datetime import datetime
 from prediction_site import PredictionSite
 import re
 
+from colorama import just_fix_windows_console
+just_fix_windows_console()
+
 class Metaculus(PredictionSite):
     def __init__(self, url):
         self._url = url

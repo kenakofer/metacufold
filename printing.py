@@ -6,7 +6,9 @@ import platform
 from metaculus import Metaculus
 from manifold import Manifold
 
-def pretty_percent(prob):
+from colorama import just_fix_windows_console
+just_fix_windows_console()
+CENT_SYMBOL="¢"
     if prob < .02 or prob > .98:
         return f'{round(prob*100, 2)}%'
     else:
