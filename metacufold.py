@@ -26,29 +26,45 @@ def help():
     print("help...")
     print("API Key: " + C.API_KEY)
 
-def url_to_market(url):
+def url_to_market(url, yes_option=None, no_option=None):
     if "metaculus.com" in url:
         return Metaculus(url)
     elif "manifold.markets" in url:
         return Manifold(url)
     elif "futuur.com" in url:
-        return Futuur(url)
+        return Futuur(url, yes_option=yes_option, no_option=no_option)
     else:
         raise Exception("Unknown URL: " + url)
 
+def arbs_from_yaml():
+    """ Example entry in the list, note the optional YES/NO under each URL:
+    - - URL: https://manifold.markets/ACXBot/9-will-a-nuclear-weapon-be-used-in
+    - URL: https://www.metaculus.com/questions/13933/10-deaths-from-nuclear-detonation-in-2023/
+    - URL: https://futuur.com/q/115818/will-there-be-a-nuclear-conflict-in-the-world-by-the-end-of-2023
+      YES_OPTION: "Yes, In 2022 Or 2023"
+      NO_OPTION: "No, Not Before 2024"
+      """
+    import yaml
+    with open("additional_arbs.yaml", "r") as file:
+        yaml_contents = yaml.load(file, Loader=yaml.FullLoader)
+        # Create arbs, each arb having a list of markets
+        arbs = []
+        for arb in yaml_contents:
+            markets = []
+            for market_info in arb:
+                # Get the URL
+                url = market_info["URL"]
+                # Get the YES and NO options
+                yes = market_info.get("YES_OPTION", None)
+                no = market_info.get("NO_OPTION", None)
+                # Create the market
+                print("Market info: " + str(market_info))
+                market = url_to_market(url, yes_option=yes, no_option=no)
+                market.probability()
+                markets.append(market)
+            arbs.append(markets)
+        return arbs
 
-def arbs_from_file():
-    # Read from additional_pairings.txt, ignoring # or blank lines, and split other lines into multiple urls by spaces
-    additional_arbs = []
-    with open("additional_arbs.txt", "r") as file:
-        additional_arbs = [
-            list(map(url_to_market, line.strip().split(" ")))
-            for line in file.readlines()
-            if line.strip() != ""
-                and not line.strip().startswith("#")
-        ]
-    print("Adding " + str(len(additional_arbs)) + " arbs from additional_arbs.txt")
-    return additional_arbs
 
 def arb_score(markets):
     """
@@ -94,7 +110,7 @@ def arb_score(markets):
 def get_markets_sorted_by_difference():
     market_pairs = MetaculusBotGroup.filtered_metaculus_arb_pairs()
     print(str(len(market_pairs)) + " valid market pairs found in Manifold's MetaculusBot group")
-    market_pairs += arbs_from_file()
+    market_pairs += arbs_from_yaml()
 
     # Sort markets by difference between manifold and metaculus probability
     market_pairs.sort(key=lambda pair: arb_score(pair), reverse=True)

@@ -45,7 +45,9 @@ class Futuur(PredictionSite):
     BROWSER_TEMPLATE=Template('https://futuur.com/q/$id')
     API_TEMPLATE=Template('https://api.futuur.com/v1.4/questions/$id')
 
-    def __init__(self, url, yes_option="Yes", no_option="No"):
+    def __init__(self, url, yes_option=None, no_option=None):
+        yes_option = yes_option or "YES"
+        no_option = no_option or "NO"
         self._url = url
         # Example url: https://futuur.com/q/169063/will-meta-amazon-apple-google-twitter-tesla-or-netflix-begin-to-accept-crypto-as-payment-by-the-end-of-2023
         # Use regex to grab the number after the q/ and before the /
@@ -65,9 +67,9 @@ class Futuur(PredictionSite):
 
     def probability(self):
         yes_option = self._get_yes_option()
-        if yes_option:
-            return yes_option['price']['BTC']
-        print("Error: Could not find yes option (" + self._yes_option + ") in Futuur market: " + self._url)
+        assert yes_option, "Error: Could not find yes option (" + self._yes_option + ") in Futuur market: " + self._url
+        return yes_option['price']['BTC']
+
 
     def size(self):
         return self.details()['volume_real_money']
@@ -90,9 +92,17 @@ class Futuur(PredictionSite):
 
 
     def _get_yes_option(self):
+        if not 'outcomes' in self.details():
+            print("Error: Could not find outcomes in Futuur market: " + self._url)
+            print("details: " + str(self.details()))
         for outcome in self.details()['outcomes']:
-            if outcome['title'] == self._yes_option:
+            # Compare case insesitive
+            if not 'title' in outcome:
+                print("Error: Could not find title in outcome: " + str(outcome))
+            if outcome['title'].lower() == self._yes_option.lower():
                 return outcome
+        print("Error: Could not find yes option (" + self._yes_option + ") in Futuur market: " + self._url)
+        print("Outcomes: " + str(self.details()['outcomes']))
         return None
 
     def _get_no_option(self):
