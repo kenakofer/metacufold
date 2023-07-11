@@ -2,6 +2,7 @@ import req as requests
 from time import time
 from manifold import Manifold
 from metaculus import Metaculus
+from arb import Arb
 import re
 
 class MetaculusBotGroup:
@@ -32,7 +33,7 @@ class MetaculusBotGroup:
             and m["url"] not in ignore_markets
         ]
 
-        arb_pairs = []
+        arbs = []
 
         for man_market in manifold_markets:
             # Search for a Metaculus link in the description
@@ -71,9 +72,9 @@ class MetaculusBotGroup:
                 print("Market has no probability: " + str(metaculus_market))
                 continue
 
-            arb_pairs.append([man_market, metaculus_market])
+            arbs.append(Arb([man_market, metaculus_market]))
 
-        return arb_pairs
+        return arbs
 
     # search recursively in 'description' for 'href': 'metaculus.com/questions/'
     # if found, return the 'href' value

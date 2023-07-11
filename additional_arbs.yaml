@@ -35,6 +35,8 @@
 - - URL: https://manifold.markets/ACXBot/12-will-ali-khameini-cease-to-be-su
   - URL: https://www.metaculus.com/questions/13987/ali-khameini-no-longer-supreme-leader/
   - URL: https://futuur.com/q/166865/will-ayatollah-khamenei-still-be-in-power-in-iran-through-the-end-of-2023
+    YES_OPTION: "No"
+    NO_OPTION: "Yes"
 - - URL: https://manifold.markets/ACXBot/13-will-any-other-war-have-more-cas
   - URL: https://www.metaculus.com/questions/14032/2023-war-casualties-vs-russiaukraine/
   - URL: https://futuur.com/q/169043/will-any-other-war-have-more-casualties-than-russia-ukraine-in-2023

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 import sys
 import os
+import yaml
 from datetime import datetime
 import argparse
-from functools import reduce
+from arb import Arb
 
 from config import Config as C
 from manifold import Manifold
@@ -11,11 +12,10 @@ from metaculus import Metaculus
 from futuur import Futuur
 from metaculus_bot_group import MetaculusBotGroup
 from printing import print_arb
-
-NOVELTY_WEIGHT = 2.0
+from req import clear_cache, get, session
 
 def sync():
-    get_markets_sorted_by_difference()
+    get_arbs_sorted_by_score()
 
 
 def bet_once():
@@ -58,68 +58,28 @@ def arbs_from_yaml():
                 yes = market_info.get("YES_OPTION", None)
                 no = market_info.get("NO_OPTION", None)
                 # Create the market
-                print("Market info: " + str(market_info))
                 market = url_to_market(url, yes_option=yes, no_option=no)
                 market.probability()
                 markets.append(market)
-            arbs.append(markets)
+            arbs.append(Arb(markets))
         return arbs
 
 
-def arb_score(markets):
-    """
-    Returns a score for a given arb, which is based on the difference in probabilities and the size of the markets.
-    """
-
-    # Sort the markets by probabilily
-    markets.sort(key=lambda m: m.probability())
-
-    # Size score is the product of the sizes of the markets, root the number of markets
-    size_score = reduce(lambda x, y: x * y, [m.size() for m in markets], 1)
-    size_score **= (1 / len(markets))
-
-    bound = lambda x: min(max(x, 0.005), 0.995)
-
-    lower = bound(markets[0].probability())
-    upper = bound(markets[-1].probability())
-
-    spread_score = (upper - lower)
-    edginess_score = 1 / (upper * lower * (1 - upper) * (1 - lower))
-
-    # Immanence score (if it closes sooner, it's better)
-    immanence_score = 3600 * 24 * 365 / (markets[0].close_time() - datetime.now()).total_seconds()
-
-    # Position score: if I'm holding a Manifold position, but Metaculus is the other way, we want to know about that and probably sell the position.
-    position_score = 1
-    if spread_score > 2:
-        lower_shares = markets[0].user_position_shares(C.MANIFOLD_USERNAME)
-        upper_shares = markets[-1].user_position_shares(C.MANIFOLD_USERNAME)
-        if lower_shares < 0 or upper_shares > 0:
-            position_score = 10000
-        elif lower_shares == 0 and upper_shares == 0:
-            position_score = NOVELTY_WEIGHT
 
 
-
-    #print(size_score, spread_score, edginess_score, immanence_score)
-
-    return size_score * spread_score**3 * edginess_score * immanence_score**.5 * position_score
-
-
-
-def get_markets_sorted_by_difference():
-    market_pairs = MetaculusBotGroup.filtered_metaculus_arb_pairs()
-    print(str(len(market_pairs)) + " valid market pairs found in Manifold's MetaculusBot group")
-    market_pairs += arbs_from_yaml()
+def get_arbs_sorted_by_score():
+    arbs = MetaculusBotGroup.filtered_metaculus_arb_pairs()
+    print(str(len(arbs)) + " valid market pairs found in Manifold's MetaculusBot group")
+    arbs += arbs_from_yaml()
 
     # Sort markets by difference between manifold and metaculus probability
-    market_pairs.sort(key=lambda pair: arb_score(pair), reverse=True)
+    arbs.sort(key=lambda arb: arb.score(), reverse=True)
 
     # Print out the top ten with their urls and probabilities
-    for pair in market_pairs[:20]:
-        print_arb(pair[0].title(), pair, arb_score(pair))
+    for arb in arbs[:20]:
+        print_arb(arb)
 
-    return market_pairs
+    return arbs
 
 
 # For the main method, check arguments to see function to run
@@ -140,6 +100,10 @@ if __name__ == "__main__":
             # Run the fold method
             sync()
             sys.exit(0)
+        elif sys.argv[1] == "clear-cache":
+            clear_cache()
+            print("Cache cleared")
+            sys.exit(0)
         elif sys.argv[1] == "bet-once":
             # Run the unfold method
             bet_once()
@@ -147,6 +111,11 @@ if __name__ == "__main__":
         elif sys.argv[1] == "help":
             # Print the help message
             help()
+            sys.exit(0)
+        elif sys.argv[1] == "test-cache":
+            for i in range(10):
+                print("Test " + str(i+1) + ":")
+                get("https://www.metaculus.com/questions/13933")
             sys.exit(0)
         else:
             print("Invalid argument: " + sys.argv[1])

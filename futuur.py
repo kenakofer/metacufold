@@ -74,6 +74,22 @@ class Futuur(PredictionSite):
         return yes_option['price']['BTC']
 
 
+    """ Unfortunately, the faq doesn't tell us the formula for the fees. With some experimentation, the fees are around:
+      PROB  FEE
+      .5 -> .08
+      .96 -> .98
+      .01 -> <.01
+      A formula that approximates this is:
+        fee = prob * (.22 - .22*prob*prob)
+    """
+    def fee_adjustment(self, buying_yes):
+        prob = self.probability()
+        inversion = 1
+        if not buying_yes:
+            prob = 1 - prob
+            inversion = -1
+        return inversion * prob * (.22 - .22*prob*prob)
+
     def size(self):
         return self.details()['volume_real_money']
 

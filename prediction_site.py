@@ -20,6 +20,9 @@ class PredictionSite:
     def probability(self):
         raise NotImplementedError("Inheriting class must implement this")
 
+    def fee_adjustment(self, buying_yes):
+        return 0
+
     def size(self):
         raise NotImplementedError("Inheriting class must implement this")
 

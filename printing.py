@@ -5,30 +5,50 @@ import sys
 import platform
 from metaculus import Metaculus
 from manifold import Manifold
+from arb import Order
 
 from colorama import just_fix_windows_console
 just_fix_windows_console()
-CENT_SYMBOL="¢"
-    if prob < .02 or prob > .98:
-        return f'{round(prob*100, 2)}%'
-    else:
-        return f'{round(prob*100)}%'
 
-def print_arb(title, arb, arb_score):
+UP_SYMBOL="▲"
+DOWN_SYMBOL="▼"
+CENT_SYMBOL="¢"
+
+def pretty_pos(market):
+    pos = round(market.user_position_shares())
+    if pos == 0:
+        return ""
+    return UP_SYMBOL + str(pos) if pos > 0 else DOWN_SYMBOL + str(-pos)
+
+def pretty_percent(arb_market):
+    string = ""
+    prob = arb_market.market.probability()
+    if prob < .02 or prob > .98:
+        string = f'{round(prob*100, 2)}%'
+    else:
+        string = f'{round(prob*100)}%'
+
+    if arb_market.order is not Order.MIDDLE:
+        fee = arb_market.fee_adjustment()
+        if fee != 0:
+            string += f'{"+" if fee > 0 else ""}{round(fee*100)}{CENT_SYMBOL}'
+    return string
+    
+
+def print_arb(arb):
     print()
-    title_string = title + " (Arb score: " + str(int(arb_score)) + ")"
+    title_string = arb.markets()[0].title() + " (Arb score: " + str(int(arb.score())) + ")"
     line_len = min(get_terminal_size()[0], len(title_string))
     print("_" * line_len)
     print(title_string)
     print()
-    sorted_arb = sorted(arb, key=lambda m: m.probability(), reverse=True)
-    for m in sorted_arb:
-        print (" {:<0}{:<0}{:<4}{:<0} {:<10} {:<11}{:<10}{:<0}".format(
-            Fore.GREEN + Style.BOLD if m is sorted_arb[0] else "",
-            Fore.RED + Style.BOLD if m is sorted_arb[-1] else "",
-            pretty_percent(m.probability()),
+    for am in arb.arb_markets()[::-1]:
+        print (" {:<0}{:<0}{:<6}{:<0}{:<10} {:<7}{:<10}{:<0}".format(
+            Fore.GREEN + Style.BOLD if am.order == Order.TOP else "",
+            Fore.RED + Style.BOLD if am.order == Order.BOTTOM else "",
+            pretty_percent(am),
             Style.reset,
-            "(" + str((m.close_time() - datetime.now()).days) + " days)",
-            "Pos: " + str(int(m.user_position_shares()))+ " " if m.user_position_shares() != 0 else "",
-            m.color(m.url()),
+            "(" + str((am.market.close_time() - datetime.now()).days) + " days)",
+            pretty_pos(am.market),
+            am.market.color(am.market.url()),
             Style.reset))
