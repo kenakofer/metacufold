@@ -9,12 +9,14 @@
 - - URL: https://manifold.markets/ACXBot/3-will-ukraine-control-the-city-of
   - URL: https://www.metaculus.com/questions/14250/ukrainian-control-of-luhansk-jan-1-2024/
   - URL: https://futuur.com/q/169054/will-ukraine-control-the-city-of-luhansk-at-the-end-of-2023
+    WIGGLE: .04
 - - URL: https://manifold.markets/ACXBot/4-will-ukraine-control-the-city-of
   - URL: https://www.metaculus.com/questions/14251/ukrainian-control-of-zaporizhzhia-jan-1-2024/
   - URL: https://futuur.com/q/169055/will-ukraine-control-the-city-of-zaporizhzhia-at-the-end-of-2023
 - - URL: https://manifold.markets/ACXBot/5-will-there-be-a-lasting-ceasefire
   - URL: https://www.metaculus.com/questions/13959/ukrainerussia-state-of-war-on-jan-1-2024/
   - URL: https://futuur.com/q/169056/will-a-lasting-cease-fire-be-in-effect-in-the-russia-ukraine-war-at-the-end-of-2023
+    WIGGLE: .04
 - - URL: https://manifold.markets/ACXBot/6-will-the-kerch-bridge-be-destroye
   - URL: https://www.metaculus.com/questions/13989/kerch-bridge-down-on-january-1-2024/
   - URL: https://futuur.com/q/169057/will-the-kerch-strait-bridge-be-destroyed-such-that-no-vehicle-can-pass-over-it-by-the-end-of-2023
@@ -32,14 +34,17 @@
 - - URL: https://manifold.markets/ACXBot/10-will-china-launch-a-fullscale-in
   - URL: https://www.metaculus.com/questions/13938/chinese-invasion-of-taiwan-in-2023/
   - URL: https://futuur.com/q/166866/will-china-try-to-take-taiwan-by-the-end-of-2023
+    WIGGLE: .1
 - - URL: https://manifold.markets/ACXBot/12-will-ali-khameini-cease-to-be-su
   - URL: https://www.metaculus.com/questions/13987/ali-khameini-no-longer-supreme-leader/
   - URL: https://futuur.com/q/166865/will-ayatollah-khamenei-still-be-in-power-in-iran-through-the-end-of-2023
     YES_OPTION: "No"
     NO_OPTION: "Yes"
+    WIGGLE: .03
 - - URL: https://manifold.markets/ACXBot/13-will-any-other-war-have-more-cas
   - URL: https://www.metaculus.com/questions/14032/2023-war-casualties-vs-russiaukraine/
   - URL: https://futuur.com/q/169043/will-any-other-war-have-more-casualties-than-russia-ukraine-in-2023
+    WIGGLE: .12
 - - URL: https://manifold.markets/ACXBot/14-will-there-be-more-than-25-milli
   - URL: https://www.metaculus.com/questions/13990/covid-cases-in-china-in-2023/
 - - URL: https://manifold.markets/ACXBot/15-at-the-end-of-2023-will-predicti
@@ -78,6 +83,7 @@
 - - URL: https://manifold.markets/ACXBot/30-will-us-cpi-inflation-for-2023-a
   - URL: https://www.metaculus.com/questions/14260/average-us-cpi-in-2023-over-4/
   - URL: https://futuur.com/q/169047/will-us-annual-average-cpi-inflation-rise-more-than-4-in-2023
+    WIGGLE: .3
 - - URL: https://manifold.markets/ACXBot/31-will-the-sp-500-index-go-up-over
   - URL: https://www.metaculus.com/questions/14261/sp-growth-over-2023/
   - URL: https://futuur.com/q/169048/will-the-sp-500-index-go-up-over-2023
@@ -87,6 +93,7 @@
 - - URL: https://manifold.markets/ACXBot/33-will-the-shanghai-index-of-chine
   - URL: https://www.metaculus.com/questions/14263/shanghai-index-growth-in-2023/
   - URL: https://futuur.com/q/169050/will-shanghais-sse-composite-index-go-up-over-2023
+    WIGGLE: .3
 - - URL: https://manifold.markets/ACXBot/34-will-bitcoin-go-up-over-2023
   - URL: https://www.metaculus.com/questions/14264/bitcoin-growth-in-2023/
 - - URL: https://manifold.markets/ACXBot/35-will-bitcoin-end-2023-above-3000
@@ -101,6 +108,7 @@
 - - URL: https://manifold.markets/ACXBot/38-will-any-faang-or-musk-company-a
   - URL: https://www.metaculus.com/questions/14268/crypto-use-as-payment-on-jan-1-2024/
   - URL: https://futuur.com/q/169063/will-meta-amazon-apple-google-twitter-tesla-or-netflix-begin-to-accept-crypto-as-payment-by-the-end-of-2023
+    WIGGLE: .12
 - - URL: https://manifold.markets/ACXBot/40-will-spacexs-starship-reach-orbi
   - URL: https://www.metaculus.com/questions/14270/spacex-starship-orbit-in-2023/
   - URL: https://futuur.com/q/169065/will-spacexs-starship-reach-orbit-in-2023

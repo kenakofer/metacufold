@@ -10,32 +10,34 @@ class Order:
 NOVELTY_WEIGHT = 2.0
 
 class Arb:
-    def __init__(self, markets, fuzz_factors=None):
-        if fuzz_factors is None:
-            fuzz_factors = [1] * len(markets)
-        assert len(markets) == len(fuzz_factors), "Number of markets and fuzz factors must be equal"
-        self._markets = [ArbMarket(m, f) for m, f in zip(markets, fuzz_factors)]
-        self._markets.sort(key=lambda am: am.market.probability())
-        self._markets[0].order = Order.TOP
-        self._markets[-1].order = Order.BOTTOM
+    def __init__(self, markets, wiggle_factors=None):
+        if wiggle_factors is None:
+            wiggle_factors = [0] * len(markets)
+        assert len(markets) == len(wiggle_factors), "Number of markets and wiggle factors must be equal"
+        self._arb_markets = [ArbMarket(m, f) for m, f in zip(markets, wiggle_factors)]
+        self._arb_markets.sort(key=lambda am: am.market.probability())
+        self._arb_markets[0].order = Order.BOTTOM
+        self._arb_markets[-1].order = Order.TOP
         self._arb_score = None
         self._arb_score = self.score()
 
     def markets(self):
-        return [am.market for am in self._markets]
+        return [am.market for am in self._arb_markets]
 
     def arb_markets(self):
-        return self._markets[:]
+        return self._arb_markets[:]
 
-    def score(self, markets=None):
+    def score(self, arb_markets=None):
         """
         Returns a score for a given arb, which is based on the difference in probabilities and the size of the markets.
         """
         if self._arb_score is not None:
             return self._arb_score
 
-        if markets is None:
-            markets = self.markets()
+        if arb_markets is None:
+            arb_markets = self._arb_markets
+
+        markets = [am.market for am in arb_markets]
 
         # Size score is the product of the sizes of the markets, root the number of markets
         size_score = reduce(lambda x, y: x * y, [m.size() for m in markets], 1)
@@ -43,18 +45,20 @@ class Arb:
 
         bound = lambda x: min(max(x, 0.005), 0.995)
 
-        lower = bound(markets[0].probability() + markets[0].fee_adjustment(True))
-        upper = bound(markets[-1].probability() + markets[-1].fee_adjustment(False))
+        assert markets[0].probability() <= markets[-1].probability(), "Markets must be sorted by probability"
+        lower = bound(markets[0].probability() + arb_markets[0].all_adjustments(True))
+        upper = bound(markets[-1].probability() + arb_markets[-1].all_adjustments(False))
 
+        # If the two cross, that means the adjustements are large enough that these two won't be arb-able.
         if lower > upper:
-            if (len(markets) < 3):
+            if (len(arb_markets) < 3):
                 spread_score = .01 # If there are only two markets, we can't remove one, so just give it a lowish spread score
-            elif (markets[0].fee_adjustment(True) < markets[-1].fee_adjustment(False)):
+            elif (arb_markets[0].all_adjustments(True) < arb_markets[-1].all_adjustments(False)):
                 # Return the arb score without the higher-fee upper market
-                return self.score(markets[:-1])
+                return self.score(arb_markets[:-1])
             else:
                 # Return the arb score without the higher-fee lower market
-                return self.score(markets[1:])
+                return self.score(arb_markets[1:])
         else:
             spread_score = upper - lower # Upper - Lower should not be negative in this branch
 
@@ -80,15 +84,33 @@ class Arb:
 
 
 class ArbMarket:
-    def __init__(self, market, fuzz_factor):
+    def __init__(self, market, wiggle_factor=0):
         self.market = market
-        self.fuzz_factor = fuzz_factor
         self.order = Order.MIDDLE
+        self.wiggle = wiggle_factor
 
-    def fee_adjustment(self):
+    def fee_adjustment(self, buying_yes=None):
+        if buying_yes is None:
+            buying_yes = self.order == Order.BOTTOM
         if self.order == Order.MIDDLE:
             return 0
-        return self.market.fee_adjustment(self.order == Order.TOP)
+        return self.market.fee_adjustment(buying_yes)
+
+    def wiggle_adjustment(self, buying_yes=None):
+        if self.wiggle == 0:
+            return 0
+        if buying_yes is None:
+            buying_yes = self.order == Order.BOTTOM
+        prob = self.market.probability()
+        inversion = 1
+        if not buying_yes:
+            prob = 1 - prob
+            inversion = -1
+        return inversion * (1-prob) * self.wiggle
+
+    def all_adjustments(self, buying_yes=None):
+        return self.fee_adjustment(buying_yes) + self.wiggle_adjustment(buying_yes)
+
 
     def __str__(self):
-        return str(self.market) + " (fuzz factor: " + str(self.fuzz_factor) + ")"
+        return str(self.market) + " (wiggle factor: " + str(self.wiggle) + ")"

@@ -51,17 +51,19 @@ def arbs_from_yaml():
         arbs = []
         for arb in yaml_contents:
             markets = []
+            wiggles = []
             for market_info in arb:
                 # Get the URL
                 url = market_info["URL"]
                 # Get the YES and NO options
                 yes = market_info.get("YES_OPTION", None)
                 no = market_info.get("NO_OPTION", None)
+                wiggles.append(market_info.get("WIGGLE", 0))
                 # Create the market
                 market = url_to_market(url, yes_option=yes, no_option=no)
                 market.probability()
                 markets.append(market)
-            arbs.append(Arb(markets))
+            arbs.append(Arb(markets, wiggles))
         return arbs
 
 

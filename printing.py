@@ -32,6 +32,9 @@ def pretty_percent(arb_market):
         fee = arb_market.fee_adjustment()
         if fee != 0:
             string += f'{"+" if fee > 0 else ""}{round(fee*100)}{CENT_SYMBOL}'
+        wiggle_adj = arb_market.wiggle_adjustment()
+        if wiggle_adj != 0:
+            string += f'{"+" if wiggle_adj > 0 else ""}{round(wiggle_adj*100)}w'
     return string
     
 
