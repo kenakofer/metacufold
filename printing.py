@@ -36,7 +36,7 @@ def pretty_percent(arb_market):
         if wiggle_adj != 0:
             string += f'{"+" if wiggle_adj > 0 else ""}{round(wiggle_adj*100)}w'
     return string
-    
+
 
 def print_arb(arb):
     print()

@@ -119,6 +119,11 @@ if __name__ == "__main__":
                 print("Test " + str(i+1) + ":")
                 get("https://www.metaculus.com/questions/13933")
             sys.exit(0)
+        elif sys.argv[1] == "test-futuur-api":
+            # for i in range(10):
+            print(Futuur.build_request())
+            sys.exit(0)
+
         else:
             print("Invalid argument: " + sys.argv[1])
             print()

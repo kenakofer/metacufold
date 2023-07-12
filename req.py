@@ -16,19 +16,19 @@ URLS_EXPIRE_AFTER = {
     'api.futuur.com':                       1200,
 }
 session = requests_cache.CachedSession(
-    'cache/requests_cache', 
-    backend='sqlite', 
-    expire_after=3600, 
+    'cache/requests_cache',
+    backend='sqlite',
+    expire_after=3600,
     urls_expire_after=URLS_EXPIRE_AFTER,
     stale_if_error=True
     )
 
-def get(url, invalidate_cache=False):
+def get(url, invalidate_cache=False, headers=None):
     # If invalidate_cache is true, clear the cache for this url
     if invalidate_cache:
         print(" xx Invalidating cache for " + url)
         session.cache.delete_url(url)
-    r = session.get(url)
+    r = session.get(url, headers=headers)
     return r
 
 def clear_cache():

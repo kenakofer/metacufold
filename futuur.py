@@ -9,6 +9,13 @@ import re
 from colorama import just_fix_windows_console
 just_fix_windows_console()
 
+## Api access
+import hashlib
+import hmac
+from collections import OrderedDict
+from urllib.parse import urlencode
+from config import Config as C
+
 """
 Withdrawl fee is .004 ETH which is ~$5.41
 Long enough on the platform and this should become insubstantial.
@@ -135,3 +142,30 @@ class Futuur(PredictionSite):
 
     def color(self, text):
         return Fore.BLUE + Style.BOLD + text + Style.reset
+
+
+    ## API access
+
+    def build_signature(params: dict):
+        params_to_sign = sorted(list(params.items()), key=lambda x: x[0].lower())
+        params_to_sign = urlencode(params_to_sign)
+        encoded_params = params_to_sign.encode('utf-8')
+        encoded_secret_key = C.FUTUUR_PRIVATE_KEY.encode('utf-8')
+        print(str(encoded_params))
+        return hmac.new(encoded_secret_key, encoded_params, hashlib.sha512).hexdigest()
+
+    def build_request():
+        url = 'https://api.futuur.com/api/v1/bets/'
+        # url = url.encode('utf-8')
+        headers = {
+            'key': C.FUTUUR_PUBLIC_KEY,
+            'timestamp': str(int(datetime.utcnow().timestamp())),
+            'currency_mode': 'real_money'
+        }
+        # headers['HMAC'] = Futuur.build_signature(headers)
+        hmac = Futuur.build_signature(headers)
+        print(headers)
+        header_string = str(urlencode(sorted(list(headers.items()), key=lambda x: x[0].lower())))
+        full_url = url + '?' + header_string + '&hmac=' + hmac
+        print(full_url)
+        return requests.get(full_url)
