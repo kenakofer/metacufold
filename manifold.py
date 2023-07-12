@@ -59,6 +59,12 @@ class Manifold(PredictionSite):
     def size(self):
         return self.details()['totalLiquidity']
 
+    def size_string(self):
+
+        # size and weird M symbol
+        M_SYMBOL = u"\u24C2"
+        return M_SYMBOL + "  " + str(self.size())
+
     def close_time(self):
         # Close time is in milliseconds since the epoch, convert to datetime
         return datetime.fromtimestamp(self.details()["closeTime"] / 1000)

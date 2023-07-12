@@ -6,13 +6,16 @@ import platform
 from metaculus import Metaculus
 from manifold import Manifold
 from arb import Order
+import tabulate
 
 from colorama import just_fix_windows_console
 just_fix_windows_console()
 
-UP_SYMBOL="▲"
-DOWN_SYMBOL="▼"
+UP_SYMBOL="▲ "
+DOWN_SYMBOL="▼ "
 CENT_SYMBOL="¢"
+CLOCK_SYMBOL="⏰"
+
 
 def pretty_pos(market):
     pos = round(market.user_position_shares())
@@ -20,13 +23,20 @@ def pretty_pos(market):
         return ""
     return UP_SYMBOL + str(pos) if pos > 0 else DOWN_SYMBOL + str(-pos)
 
+def pretty_days(market):
+    return str((market.close_time() - datetime.now()).days)
+
 def pretty_percent(arb_market):
     string = ""
+    if arb_market.order == Order.TOP:
+        string += Fore.GREEN + Style.BOLD
+    elif arb_market.order == Order.BOTTOM:
+        string += Fore.RED + Style.BOLD
     prob = arb_market.market.probability()
     if prob < .02 or prob > .98:
-        string = f'{round(prob*100, 2)}%'
+        string += f'{round(prob*100, 2)}%'
     else:
-        string = f'{round(prob*100)}%'
+        string += f'{round(prob*100)}%'
 
     if arb_market.order is not Order.MIDDLE:
         fee = arb_market.fee_adjustment()
@@ -35,8 +45,10 @@ def pretty_percent(arb_market):
         wiggle_adj = arb_market.wiggle_adjustment()
         if wiggle_adj != 0:
             string += f'{"+" if wiggle_adj > 0 else ""}{round(wiggle_adj*100)}w'
+
+    string += Style.reset
     return string
-    
+
 
 def print_arb(arb):
     print()
@@ -44,11 +56,24 @@ def print_arb(arb):
     line_len = min(get_terminal_size()[0], len(title_string))
     print("_" * line_len)
     print(title_string)
+    reversed_arb_markets = arb.arb_markets()[::-1]
+    # probs = [pretty_percent(am) for am in reversed_arb_markets]
+    # days = [pretty_days(am.market) for am in reversed_arb_markets]
+    # poss = [pretty_pos(am.market) for am in reversed_arb_markets]
+    # urls = [am.market.color(am.market.url()) for am in reversed_arb_markets]
+    headers = ["%", CLOCK_SYMBOL, "Size", "Pos", "URL"]
+    table = [[pretty_percent(am),
+              pretty_days(am.market),
+              am.market.size_string(),
+              pretty_pos(am.market),
+              am.market.color(am.market.url())]
+            for am in reversed_arb_markets]
+    # print(tabulate.tabulate(table, headers=headers, tablefmt="fancy_grid"))
+    print(tabulate.tabulate(table, headers=headers))
+    return
     print()
     for am in arb.arb_markets()[::-1]:
-        print (" {:<0}{:<0}{:<6}{:<0}{:<10} {:<7}{:<10}{:<0}".format(
-            Fore.GREEN + Style.BOLD if am.order == Order.TOP else "",
-            Fore.RED + Style.BOLD if am.order == Order.BOTTOM else "",
+        print (" {:<6}{:<0}{:<10} {:<7}{:<10}{:<0}".format(
             pretty_percent(am),
             Style.reset,
             "(" + str((am.market.close_time() - datetime.now()).days) + " days)",

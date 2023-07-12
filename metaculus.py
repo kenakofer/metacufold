@@ -36,6 +36,9 @@ class Metaculus(PredictionSite):
     def size(self):
         return self.details()["number_of_forecasters"]
 
+    def size_string(self):
+        return "👥 " + str(self.size())
+
     def close_time(self):
         # Close time is for example "2031-01-01T00:00:00Z", convert to datetime
         return datetime.fromisoformat(self.details()["close_time"][:-1])

@@ -26,6 +26,9 @@ class PredictionSite:
     def size(self):
         raise NotImplementedError("Inheriting class must implement this")
 
+    def size_string(self):
+        return str(self.size())
+
     def close_time(self):
         raise NotImplementedError("Inheriting class must implement this")
 

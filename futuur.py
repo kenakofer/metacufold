@@ -91,7 +91,10 @@ class Futuur(PredictionSite):
         return inversion * prob * (.22 - .22*prob*prob)
 
     def size(self):
-        return self.details()['volume_real_money']
+        return int(self.details()['volume_real_money'])
+
+    def size_string(self):
+        return Style.BOLD + '$  ' + Style.reset + str(self.size())
 
     def close_time(self):
         # Close time is for example "2031-01-01T00:00:00Z", convert to datetime
