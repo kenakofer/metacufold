@@ -10,21 +10,27 @@ class Order:
 NOVELTY_WEIGHT = 2.0
 
 class Arb:
-    def __init__(self, markets, wiggle_factors=None):
+    def __init__(self, markets, wiggle_factors=None, boost=0):
         if wiggle_factors is None:
             wiggle_factors = [0] * len(markets)
         assert len(markets) == len(wiggle_factors), "Number of markets and wiggle factors must be equal"
         self._arb_markets = [ArbMarket(m, f) for m, f in zip(markets, wiggle_factors)]
+        self._boost = boost
+        self._resort()
+
+    def boost(self, amount):
+        self._boost = amount
         self._resort()
 
     def markets(self):
         return [am.market for am in self._arb_markets]
 
     def _resort(self):
-        self._arb_markets.sort(key=lambda am: am.market.probability())
-        self._arb_markets[0].order = Order.BOTTOM
-        self._arb_markets[-1].order = Order.TOP
-        self._arb_score = None
+        if self._arb_markets:
+            self._arb_markets.sort(key=lambda am: am.market.probability())
+            self._arb_markets[0].order = Order.BOTTOM
+            self._arb_markets[-1].order = Order.TOP
+            self._arb_score = None
         self._arb_score = self.score()
 
     def remove_market(self, market):
@@ -48,7 +54,8 @@ class Arb:
             arb_markets = self._arb_markets
 
         if len(arb_markets) == 1:
-            return 0
+            self._arb_score = 0
+            return self._arb_score
 
         markets = [am.market for am in arb_markets]
 
@@ -93,6 +100,8 @@ class Arb:
         # print(size_score, spread_score, edginess_score, immanence_score)
 
         self._arb_score = size_score * spread_score**3 * edginess_score * immanence_score**.5 * position_score
+
+        self._arb_score += self._boost
         return self._arb_score
 
 

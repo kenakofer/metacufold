@@ -136,11 +136,32 @@
 
 # Political
 
-# Republican nominee
-- - URL: https://www.predictit.org/markets/detail/7053/Who-will-win-the-2024-Republican-presidential-nomination
-    YES_OPTION: "Donald Trump"
+# Republican nominee: Trump
+- - URL: https://www.metaculus.com/questions/5049
   - URL: https://manifold.markets/jack/will-donald-trump-be-the-2024-repub
+  - URL: https://manifold.markets/RichardShu/will-donald-trump-be-the-republican-1120636b600a
+  - URL: https://www.predictit.org/markets/detail/7053/Who-will-win-the-2024-Republican-presidential-nomination
+    YES_OPTION: "Donald Trump"
+  - URL: https://futuur.com/q/155042/who-will-be-the-republican-presidential-nominee-in-the-us-elections-of-2024
+    YES_OPTION: "Donald Trump"
+
+# Democrat nominee: Biden:
+- - URL: https://futuur.com/q/155043/who-will-be-the-democratic-presidential-nominee-in-the-us-elections-of-2024
+    YES_OPTION: "Joe Biden"
+
+# Republican nominee: DeSantis
+- - URL: https://www.metaculus.com/questions/6590
+  - URL: https://manifold.markets/SG/will-ron-desantis-be-the-2024-repub
+  - URL: https://www.predictit.org/markets/detail/7053/Who-will-win-the-2024-Republican-presidential-nomination
+    YES_OPTION: "Ron DeSantis"
+  - URL: https://futuur.com/q/155042/who-will-be-the-republican-presidential-nominee-in-the-us-elections-of-2024
+    YES_OPTION: "Ron DeSantis"
 
 # 2024 president: Trump
-# - - URL: https://manifold.markets/jack/who-will-win-2024-us-presidential-e
-#   - YES_OPTION: Donald Trump
+- - URL: https://www.metaculus.com/questions/5717
+  - URL: https://manifold.markets/duck/will-donald-trump-win-the-2024-pres
+  - URL: https://manifold.markets/jack/who-will-win-2024-us-presidential-e
+    YES_OPTION: Donald Trump
+  - URL: https://www.predictit.org/markets/detail/7456/Who-will-win-the-2024-US-presidential-election
+    YES_OPTION: Donald Trump
+

@@ -178,4 +178,4 @@ class Predictit(PredictionSite):
         return None
 
     def color(self, text):
-        return Fore.BLUE + Style.BOLD + text + Style.reset
+        return Back.DARK_BLUE + Fore.WHITE + Style.BOLD + text + Style.reset

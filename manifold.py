@@ -13,7 +13,9 @@ class Manifold(PredictionSite):
 
     PLATFORM_NAME = "Manifold"
 
-    def __init__(self, url, market_id=""):
+    def __init__(self, url, market_id="", yes_option=None, no_option=None):
+        self._yes_option = yes_option
+        self._no_option = no_option
         self._url = url
         # https://manifold.markets/MetaculusBot/which-party-will-win-the-most-seats-152d40f3951e -> which-party-will-win-the-most-seats-152d40f3951e
         # Use regex to grab the string after the last slash (not slug)
@@ -55,8 +57,26 @@ class Manifold(PredictionSite):
     def title(self):
         return self.details()['question']
 
+    def _get_yes_option(self):
+        if not 'answers' in self.details():
+            print("Error: Could not find answers in Manifold question: " + self._url)
+            print("details: " + str(self.details()))
+        for outcome in self.details()['answers']:
+            # Compare case insesitive
+            if not 'text' in outcome:
+                print("Error: Could not find text in outcome: " + str(outcome))
+            if outcome['text'].lower() == self._yes_option.lower():
+                return outcome
+        print("Error: Could not find yes option (" + self._yes_option + ") in Predictit market: " + self._url)
+        print("Answers: " + str(self.details()['answers']))
+        return None
+
     def probability(self):
-        return round(self.details()['probability'], 2)
+        if self._yes_option == None:
+            return round(self.details()['probability'], 2)
+        else:
+            yes_option = self._get_yes_option()
+            return round(yes_option['probability'], 2)
 
     def size(self):
         return self.details()['totalLiquidity']
@@ -65,7 +85,7 @@ class Manifold(PredictionSite):
 
         # size and weird M symbol
         M_SYMBOL = u"\u24C2"
-        return M_SYMBOL + "  " + str(self.size())
+        return M_SYMBOL + "  " + str(int(self.size()))
 
     def close_time(self):
         # Close time is in milliseconds since the epoch, convert to datetime

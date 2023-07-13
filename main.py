@@ -31,7 +31,7 @@ def url_to_market(url, yes_option=None, no_option=None):
     if "metaculus.com" in url:
         return Metaculus(url)
     elif "manifold.markets" in url:
-        return Manifold(url)
+        return Manifold(url, yes_option=yes_option, no_option=no_option)
     elif "futuur.com" in url:
         return Futuur(url, yes_option=yes_option, no_option=no_option)
     elif "predictit.org" in url:
@@ -56,8 +56,12 @@ def arbs_from_yaml():
         for arb in yaml_contents:
             markets = []
             wiggles = []
+            boost = 0
             for market_info in arb:
                 # Get the URL
+                if "BOOST" in market_info:
+                    boost = market_info["BOOST"]
+                    continue
                 url = market_info["URL"]
                 # Get the YES and NO options
                 yes = market_info.get("YES_OPTION", None)
@@ -67,7 +71,7 @@ def arbs_from_yaml():
                 market = url_to_market(url, yes_option=yes, no_option=no)
                 market.probability()
                 markets.append(market)
-            arbs.append(Arb(markets, wiggles))
+            arbs.append(Arb(markets, wiggle_factors=wiggles, boost=boost))
         return arbs
 
 
@@ -79,10 +83,11 @@ def get_arbs_sorted_by_score(platforms):
     arbs += arbs_from_yaml()
 
     # Filter to markets with lowercase class in platforms
-    for a in arbs:
-        for am in a.arb_markets():
-            if am.market.PLATFORM_NAME.lower() not in platforms:
-                a.remove_market(am)
+    if platforms:
+        for a in arbs:
+            for am in a.arb_markets():
+                if am.market.PLATFORM_NAME.lower() not in platforms:
+                    a.remove_market(am)
 
     # Sort markets by difference between manifold and metaculus probability
     arbs.sort(key=lambda arb: arb.score(), reverse=True)
