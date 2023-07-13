@@ -17,8 +17,8 @@ CENT_SYMBOL="¢"
 CLOCK_SYMBOL="⏰ "
 
 
-def pretty_pos(market):
-    pos = round(market.user_position_shares())
+def pretty_pos(arb_market):
+    pos = round(arb_market.user_position_shares())
     if pos == 0:
         return ""
     return UP_SYMBOL + str(pos) if pos > 0 else DOWN_SYMBOL + str(-pos)
@@ -32,7 +32,7 @@ def pretty_percent(arb_market):
         string += Fore.GREEN + Style.BOLD
     elif arb_market.order == Order.BOTTOM:
         string += Fore.RED + Style.BOLD
-    prob = arb_market.market.probability()
+    prob = arb_market.probability()
     if prob < .02 or prob > .98:
         string += f'{round(prob*100, 2)}%'
     else:
@@ -57,26 +57,12 @@ def print_arb(arb):
     print("_" * line_len)
     print(title_string)
     reversed_arb_markets = arb.arb_markets()[::-1]
-    # probs = [pretty_percent(am) for am in reversed_arb_markets]
-    # days = [pretty_days(am.market) for am in reversed_arb_markets]
-    # poss = [pretty_pos(am.market) for am in reversed_arb_markets]
-    # urls = [am.market.color(am.market.url()) for am in reversed_arb_markets]
     headers = ["%", CLOCK_SYMBOL, "Size", "Pos", "URL"]
     table = [[pretty_percent(am),
               pretty_days(am.market),
               am.market.size_string(),
-              pretty_pos(am.market),
+              pretty_pos(am),
               am.market.color(am.market.url())]
             for am in reversed_arb_markets]
     # print(tabulate.tabulate(table, headers=headers, tablefmt="fancy_grid"))
     print(tabulate.tabulate(table, headers=headers))
-    return
-    print()
-    for am in arb.arb_markets()[::-1]:
-        print (" {:<6}{:<0}{:<10} {:<7}{:<10}{:<0}".format(
-            pretty_percent(am),
-            Style.reset,
-            "(" + str((am.market.close_time() - datetime.now()).days) + " days)",
-            pretty_pos(am.market),
-            am.market.color(am.market.url()),
-            Style.reset))

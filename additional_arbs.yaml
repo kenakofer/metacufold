@@ -165,3 +165,9 @@
   - URL: https://www.predictit.org/markets/detail/7456/Who-will-win-the-2024-US-presidential-election
     YES_OPTION: Donald Trump
 
+# Biden finish term
+- - URL: https://futuur.com/q/121843/will-joe-biden-finish-his-presidential-term
+  - URL: https://manifold.markets/Gigacasting/will-biden-complete-his-term
+  - URL: https://www.metaculus.com/questions/12217/biden-does-not-complete-first-term/
+    INVERT: True
+  - BOOST: 10000

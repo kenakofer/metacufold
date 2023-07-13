@@ -10,11 +10,13 @@ class Order:
 NOVELTY_WEIGHT = 2.0
 
 class Arb:
-    def __init__(self, markets, wiggle_factors=None, boost=0):
+    def __init__(self, markets, wiggle_factors=None, boost=0, inverts=None):
         if wiggle_factors is None:
             wiggle_factors = [0] * len(markets)
+        if inverts is None:
+            inverts = [False] * len(markets)
         assert len(markets) == len(wiggle_factors), "Number of markets and wiggle factors must be equal"
-        self._arb_markets = [ArbMarket(m, f) for m, f in zip(markets, wiggle_factors)]
+        self._arb_markets = [ArbMarket(m, f, invert=i) for m, f, i in zip(markets, wiggle_factors, inverts)]
         self._boost = boost
         self._resort()
 
@@ -27,7 +29,7 @@ class Arb:
 
     def _resort(self):
         if self._arb_markets:
-            self._arb_markets.sort(key=lambda am: am.market.probability())
+            self._arb_markets.sort(key=lambda am: am.probability())
             self._arb_markets[0].order = Order.BOTTOM
             self._arb_markets[-1].order = Order.TOP
             self._arb_score = None
@@ -65,9 +67,9 @@ class Arb:
 
         bound = lambda x: min(max(x, 0.005), 0.995)
 
-        assert markets[0].probability() <= markets[-1].probability(), "Markets must be sorted by probability"
-        lower = bound(markets[0].probability() + arb_markets[0].all_adjustments(True))
-        upper = bound(markets[-1].probability() + arb_markets[-1].all_adjustments(False))
+        assert arb_markets[0].probability() <= arb_markets[-1].probability(), "Markets must be sorted by probability"
+        lower = bound(arb_markets[0].probability() + arb_markets[0].all_adjustments(True))
+        upper = bound(arb_markets[-1].probability() + arb_markets[-1].all_adjustments(False))
 
         # If the two cross, that means the adjustements are large enough that these two won't be arb-able.
         if lower > upper:
@@ -90,8 +92,8 @@ class Arb:
         # Position score: if I'm holding a Manifold position, but Metaculus is the other way, we want to know about that and probably sell the position.
         position_score = 1
         if spread_score > 2:
-            lower_shares = markets[0].user_position_shares()
-            upper_shares = markets[-1].user_position_shares()
+            lower_shares = arb_markets[0].user_position_shares()
+            upper_shares = arb_markets[-1].user_position_shares()
             if lower_shares < 0 or upper_shares > 0:
                 position_score = 10000
             elif lower_shares == 0 and upper_shares == 0:
@@ -106,16 +108,29 @@ class Arb:
 
 
 class ArbMarket:
-    def __init__(self, market, wiggle_factor=0):
+    def __init__(self, market, wiggle_factor=0, invert=False):
         self.market = market
         self.order = Order.MIDDLE
         self.wiggle = wiggle_factor
+        self.invert = invert
+
+    def probability(self):
+        prob = self.market.probability()
+        if self.invert:
+            prob = 1 - prob
+        return prob
+
+    def user_position_shares(self):
+        inversion_factor = -1 if self.invert else 1
+        return inversion_factor * self.market.user_position_shares()
 
     def fee_adjustment(self, buying_yes=None):
         if buying_yes is None:
             buying_yes = self.order == Order.BOTTOM
         if self.order == Order.MIDDLE:
             return 0
+        if self.invert:
+            buying_yes = not buying_yes
         return self.market.fee_adjustment(buying_yes)
 
     def wiggle_adjustment(self, buying_yes=None):
@@ -123,7 +138,7 @@ class ArbMarket:
             return 0
         if buying_yes is None:
             buying_yes = self.order == Order.BOTTOM
-        prob = self.market.probability()
+        prob = self.probability()
         inversion = 1
         if not buying_yes:
             prob = 1 - prob

@@ -56,6 +56,7 @@ def arbs_from_yaml():
         for arb in yaml_contents:
             markets = []
             wiggles = []
+            inverts = []
             boost = 0
             for market_info in arb:
                 # Get the URL
@@ -67,11 +68,12 @@ def arbs_from_yaml():
                 yes = market_info.get("YES_OPTION", None)
                 no = market_info.get("NO_OPTION", None)
                 wiggles.append(market_info.get("WIGGLE", 0))
+                inverts.append(market_info.get("INVERT", False))
                 # Create the market
                 market = url_to_market(url, yes_option=yes, no_option=no)
                 market.probability()
                 markets.append(market)
-            arbs.append(Arb(markets, wiggle_factors=wiggles, boost=boost))
+            arbs.append(Arb(markets, wiggle_factors=wiggles, boost=boost, inverts=inverts))
         return arbs
 
 
