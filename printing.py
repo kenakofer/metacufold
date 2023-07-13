@@ -14,7 +14,7 @@ just_fix_windows_console()
 UP_SYMBOL="▲ "
 DOWN_SYMBOL="▼ "
 CENT_SYMBOL="¢"
-CLOCK_SYMBOL="⏰"
+CLOCK_SYMBOL="⏰ "
 
 
 def pretty_pos(market):

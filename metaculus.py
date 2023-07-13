@@ -8,6 +8,9 @@ from colorama import just_fix_windows_console
 just_fix_windows_console()
 
 class Metaculus(PredictionSite):
+
+    PLATFORM_NAME = "Metaculus"
+
     def __init__(self, url):
         self._url = url
         self._market_id = str(re.search(r"questions/(\d+)", url).group(1))

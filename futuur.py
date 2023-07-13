@@ -40,8 +40,6 @@ in the market.
 
 """
 
-FEE_ADJUSTED_SHARE_PRICE_FACTOR = 1.11
-
 class Futuur(PredictionSite):
 
     PLATFORM_NAME="Futuur"
@@ -132,9 +130,6 @@ class Futuur(PredictionSite):
             if outcome['title'] == self._no_option:
                 return outcome
         return None
-
-    def fee_adjusted_share_price(share_price):
-        return round(share_price * FEE_ADJUSTED_SHARE_PRICE_FACTOR, 3)
 
     def color(self, text):
         return Fore.BLUE + Style.BOLD + text + Style.reset

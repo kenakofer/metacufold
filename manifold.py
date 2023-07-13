@@ -11,6 +11,8 @@ just_fix_windows_console()
 
 class Manifold(PredictionSite):
 
+    PLATFORM_NAME = "Manifold"
+
     def __init__(self, url, market_id=""):
         self._url = url
         # https://manifold.markets/MetaculusBot/which-party-will-win-the-most-seats-152d40f3951e -> which-party-will-win-the-most-seats-152d40f3951e

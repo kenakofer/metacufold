@@ -15,14 +15,24 @@ class Arb:
             wiggle_factors = [0] * len(markets)
         assert len(markets) == len(wiggle_factors), "Number of markets and wiggle factors must be equal"
         self._arb_markets = [ArbMarket(m, f) for m, f in zip(markets, wiggle_factors)]
+        self._resort()
+
+    def markets(self):
+        return [am.market for am in self._arb_markets]
+
+    def _resort(self):
         self._arb_markets.sort(key=lambda am: am.market.probability())
         self._arb_markets[0].order = Order.BOTTOM
         self._arb_markets[-1].order = Order.TOP
         self._arb_score = None
         self._arb_score = self.score()
 
-    def markets(self):
-        return [am.market for am in self._arb_markets]
+    def remove_market(self, market):
+        if isinstance(market, ArbMarket):
+            self.remove_market(market.market)
+            return
+        self._arb_markets = [am for am in self._arb_markets if am.market != market]
+        self._resort()
 
     def arb_markets(self):
         return self._arb_markets[:]
@@ -36,6 +46,9 @@ class Arb:
 
         if arb_markets is None:
             arb_markets = self._arb_markets
+
+        if len(arb_markets) == 1:
+            return 0
 
         markets = [am.market for am in arb_markets]
 

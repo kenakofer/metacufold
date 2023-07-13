@@ -10,12 +10,13 @@ from config import Config as C
 from manifold import Manifold
 from metaculus import Metaculus
 from futuur import Futuur
+from predictit import Predictit
 from metaculus_bot_group import MetaculusBotGroup
 from printing import print_arb
 from req import clear_cache, get, session
 
-def sync():
-    get_arbs_sorted_by_score()
+def sync(platforms):
+    get_arbs_sorted_by_score(platforms)
 
 
 def bet_once():
@@ -33,6 +34,9 @@ def url_to_market(url, yes_option=None, no_option=None):
         return Manifold(url)
     elif "futuur.com" in url:
         return Futuur(url, yes_option=yes_option, no_option=no_option)
+    elif "predictit.org" in url:
+        return Predictit(url, yes_option=yes_option, no_option=no_option)
+
     else:
         raise Exception("Unknown URL: " + url)
 
@@ -69,16 +73,24 @@ def arbs_from_yaml():
 
 
 
-def get_arbs_sorted_by_score():
+def get_arbs_sorted_by_score(platforms):
     arbs = MetaculusBotGroup.filtered_metaculus_arb_pairs()
     print(str(len(arbs)) + " valid market pairs found in Manifold's MetaculusBot group")
     arbs += arbs_from_yaml()
+
+    # Filter to markets with lowercase class in platforms
+    for a in arbs:
+        for am in a.arb_markets():
+            if am.market.PLATFORM_NAME.lower() not in platforms:
+                a.remove_market(am)
 
     # Sort markets by difference between manifold and metaculus probability
     arbs.sort(key=lambda arb: arb.score(), reverse=True)
 
     # Print out the top ten with their urls and probabilities
     for arb in arbs[:20]:
+        if (arb.score() <= 0):
+            break
         print_arb(arb)
 
     return arbs
@@ -99,8 +111,8 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         # Check the first argument
         if sys.argv[1] == "sync":
-            # Run the fold method
-            sync()
+            # Run the sync method, passing in any addiotanl arguments
+            sync(sys.argv[2:])
             sys.exit(0)
         elif sys.argv[1] == "clear-cache":
             clear_cache()
