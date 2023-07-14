@@ -93,7 +93,8 @@ class Arb:
         else:
             spread_score = upper - lower # Upper - Lower should not be negative in this branch
 
-        edginess_score = 1 / (upper * lower * (1 - upper) * (1 - lower))
+        # Edging score: if the markets are close to 0 or 1, that's good
+        edginess_score = 1 / ((upper + .01) * (lower + .01) * (1.01 - upper) * (1.01 - lower))
 
         # Immanence score (if it closes sooner, it's better)
         immanence_score = 3600 * 24 * 365 / (markets[0].close_time() - datetime.now()).total_seconds()
@@ -108,9 +109,15 @@ class Arb:
             elif lower_shares == 0 and upper_shares == 0:
                 position_score = NOVELTY_WEIGHT
 
-        # print(size_score, spread_score, edginess_score, immanence_score)
-
         self._arb_score = size_score * spread_score**3 * edginess_score * immanence_score**.5 * position_score
+        self._arb_score_breakdown = {
+            'size': round(size_score, 2),
+            'spread': round(spread_score, 2),
+            'edginess': round(edginess_score, 2),
+            'immanence': round(immanence_score, 2),
+            'position': round(position_score, 2),
+            'total': round(self._arb_score, 2)
+        }
 
         self._arb_score += self._boost
         return self._arb_score

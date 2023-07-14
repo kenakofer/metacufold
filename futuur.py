@@ -57,6 +57,9 @@ class Futuur(PredictionSite):
         self._yes_option = yes_option
         self._no_option = no_option
 
+    def is_real_money(self):
+        return True
+
     def details(self):
         if not self._details:
             details_url = Futuur.API_TEMPLATE.substitute(id=self.market_id())

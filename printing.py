@@ -56,6 +56,7 @@ def print_arb(arb):
     line_len = min(get_terminal_size()[0], len(title_string))
     print("_" * line_len)
     print(title_string)
+    print(arb._arb_score_breakdown)
     reversed_arb_markets = arb.arb_markets()[::-1]
     headers = ["%", CLOCK_SYMBOL, "Size", "Pos", "URL"]
     table = [[pretty_percent(am),

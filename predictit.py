@@ -96,6 +96,9 @@ class Predictit(PredictionSite):
         self._no_option = no_option
         self._total_shares_traded = None
 
+    def is_real_money(self):
+        return True
+
     def details(self):
         if not self._details:
             details_url = Predictit.API_TEMPLATE.substitute(id=self.market_id())
@@ -157,7 +160,7 @@ class Predictit(PredictionSite):
         return datetime.now() + timedelta(days=365)
 
     def is_binary(self):
-        return self._get_yes_option() 
+        return self._get_yes_option()
 
     def is_open(self):
         deets = self.details()

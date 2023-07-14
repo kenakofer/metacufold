@@ -1,9 +1,13 @@
 class PredictionSite:
+
     def __init__(self):
         raise NotImplementedError("Inheriting class must implement this")
 
     def url(self):
         return self._url
+
+    def is_real_money(self):
+        raise NotImplementedError("Inheriting class must implement this")
 
     def color(self, text):
         raise NotImplementedError("Inheriting class must implement this")

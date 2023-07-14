@@ -16,6 +16,9 @@ class Metaculus(PredictionSite):
         self._market_id = str(re.search(r"questions/(\d+)", url).group(1))
         self._details = None
 
+    def is_real_money(self):
+        return False
+
     def details(self):
         if not self._details:
             deets_url = "https://www.metaculus.com/api2/questions/" + self._market_id

@@ -25,6 +25,9 @@ class Manifold(PredictionSite):
         self._all_positions = None
         self._summary = None
 
+    def is_real_money(self):
+        return False
+
     def market_id(self):
         if not self._market_id:
             if not self._summary:
