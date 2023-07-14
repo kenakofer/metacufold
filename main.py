@@ -58,10 +58,14 @@ def arbs_from_yaml():
             wiggles = []
             inverts = []
             boost = 0
+            title = None
             for market_info in arb:
                 # Get the URL
                 if "BOOST" in market_info:
                     boost = market_info["BOOST"]
+                    continue
+                if "TITLE" in market_info:
+                    title = market_info["TITLE"]
                     continue
                 url = market_info["URL"]
                 # Get the YES and NO options
@@ -73,7 +77,8 @@ def arbs_from_yaml():
                 market = url_to_market(url, yes_option=yes, no_option=no)
                 market.probability()
                 markets.append(market)
-            arbs.append(Arb(markets, wiggle_factors=wiggles, boost=boost, inverts=inverts))
+            arb = Arb(markets, wiggle_factors=wiggles, boost=boost, inverts=inverts, title=title)
+            arbs.append(arb)
         return arbs
 
 

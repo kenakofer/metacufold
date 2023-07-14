@@ -1,6 +1,8 @@
 ---
 # ACX prediction contest:
 - - URL: https://manifold.markets/ACXBot/1-will-vladimir-putin-be-president
+  - URL: https://manifold.markets/ahalekelly/will-vladimir-putin-still-be-the-le
+  - URL: https://manifold.markets/a/vladimir-putin-will-still-be-presid
   - URL: https://www.metaculus.com/questions/13930/putin-presidency-on-jan-1-2024/
   - URL: https://futuur.com/q/169061/will-vladimir-putin-be-president-of-russia-at-the-end-of-2023
 - - URL: https://manifold.markets/ACXBot/2-will-ukraine-control-the-city-of
@@ -166,8 +168,22 @@
     YES_OPTION: Donald Trump
 
 # Biden finish term
-- - URL: https://futuur.com/q/121843/will-joe-biden-finish-his-presidential-term
+- - TITLE: "Will Biden finish his first term?"
+  - URL: https://futuur.com/q/121843/will-joe-biden-finish-his-presidential-term
   - URL: https://manifold.markets/Gigacasting/will-biden-complete-his-term
   - URL: https://www.metaculus.com/questions/12217/biden-does-not-complete-first-term/
     INVERT: True
-  - BOOST: 10000
+
+- - TITLE: "Will the next 007 be a woman?"
+  - URL: https://manifold.markets/Predictor/will-the-next-james-bond-after-no-t
+  - URL: https://futuur.com/q/115112/will-the-next-007-be-a-woman
+  - URL: https://futuur.com/q/126199
+
+- - TITLE: "Will the next 007 be black?"
+  - URL: https://futuur.com/q/115113
+  - URL: https://futuur.com/q/126197
+  - URL: https://manifold.markets/Predictor/will-the-next-agent-007-after-no-ti
+
+- - TITLE: "Will the writer's strike last 100 days?"
+  - URL: https://manifold.markets/Gabrielle/will-the-hollywood-writer-strike-la#0swoKJosuMWXnibk8hgr
+  - URL: https://futuur.com/q/175499/will-the-us-screenwriters-strike-last-at-least-100-days/

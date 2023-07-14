@@ -52,7 +52,7 @@ def pretty_percent(arb_market):
 
 def print_arb(arb):
     print()
-    title_string = arb.markets()[0].title() + " (Arb score: " + str(int(arb.score())) + ")"
+    title_string = Style.BOLD + arb.title() + Style.reset + " (Arb score: " + str(int(arb.score())) + ")"
     line_len = min(get_terminal_size()[0], len(title_string))
     print("_" * line_len)
     print(title_string)
