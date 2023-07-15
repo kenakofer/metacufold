@@ -94,7 +94,7 @@ class Arb:
             spread_score = upper - lower # Upper - Lower should not be negative in this branch
 
         # Edging score: if the markets are close to 0 or 1, that's good
-        edginess_score = 1 / ((upper + .01) * (lower + .01) * (1.01 - upper) * (1.01 - lower))
+        edginess_score = 1 / ((upper + .02) * (lower + .02) * (1.02 - upper) * (1.02 - lower))
 
         # Immanence score (if it closes sooner, it's better)
         immanence_score = 3600 * 24 * 365 / (markets[0].close_time() - datetime.now()).total_seconds()
