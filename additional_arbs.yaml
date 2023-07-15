@@ -138,26 +138,93 @@
 
 # Political
 
-# Republican nominee: Trump
-- - URL: https://www.metaculus.com/questions/5049
+# Republican nominee
+- - TITLE: "2024 Republican Nominee: Donald Trump"
+  - URL: https://www.metaculus.com/questions/5049
   - URL: https://manifold.markets/jack/will-donald-trump-be-the-2024-repub
   - URL: https://manifold.markets/RichardShu/will-donald-trump-be-the-republican-1120636b600a
+  - URL: https://manifold.markets/AndrewG/who-will-be-the-republican-presiden-f919d704855c
+    YES_OPTION: "D. Trump"
+  - URL: https://manifold.markets/PC/who-will-be-the-republican-presiden-7bf11c066154
+    YES_OPTION: "Donald Trump"
   - URL: https://www.predictit.org/markets/detail/7053/Who-will-win-the-2024-Republican-presidential-nomination
     YES_OPTION: "Donald Trump"
   - URL: https://futuur.com/q/155042/who-will-be-the-republican-presidential-nominee-in-the-us-elections-of-2024
     YES_OPTION: "Donald Trump"
 
-# Democrat nominee: Biden:
-- - URL: https://futuur.com/q/155043/who-will-be-the-democratic-presidential-nominee-in-the-us-elections-of-2024
+- - TITLE: "2024 Republican Nominee: Ron DeSantis"
+  - URL: https://www.metaculus.com/questions/6590
+  - URL: https://manifold.markets/SG/will-ron-desantis-be-the-2024-repub
+  - URL: https://manifold.markets/AndrewG/who-will-be-the-republican-presiden-f919d704855c
+    YES_OPTION: "R. DeSantis"
+  - URL: https://manifold.markets/PC/who-will-be-the-republican-presiden-7bf11c066154
+    YES_OPTION: "Ron DeSantis"
+  - URL: https://www.predictit.org/markets/detail/7053/Who-will-win-the-2024-Republican-presidential-nomination
+    YES_OPTION: "Ron DeSantis"
+  - URL: https://futuur.com/q/155042/who-will-be-the-republican-presidential-nominee-in-the-us-elections-of-2024
+    YES_OPTION: "Ron DeSantis"
+
+- - TITLE: "2024 Republican Nominee: Glenn Youngkin"
+  - URL: https://manifold.markets/jack/will-glenn-youngkin-be-the-2024-rep
+  - URL: https://www.predictit.org/markets/detail/7053/Who-will-win-the-2024-Republican-presidential-nomination
+    YES_OPTION: "Glenn Youngkin"
+
+- - TITLE: "2024 Republican Nominee: Nikki Haley"
+  - URL: https://www.metaculus.com/questions/11699
+  - URL: https://manifold.markets/jack/will-nikki-haley-be-the-2024-republ
+  - URL: https://manifold.markets/AndrewG/who-will-be-the-republican-presiden-f919d704855c
+    YES_OPTION: "N. Haley"
+  - URL: https://manifold.markets/PC/who-will-be-the-republican-presiden-7bf11c066154
+    YES_OPTION: "Nikki Haley"
+  - URL: https://www.predictit.org/markets/detail/7053/Who-will-win-the-2024-Republican-presidential-nomination
+    YES_OPTION: "Nikki Haley"
+  - URL: https://futuur.com/q/155042/who-will-be-the-republican-presidential-nominee-in-the-us-elections-of-2024
+    YES_OPTION: "Nikki Haley"
+
+- - TITLE: "2024 Republican Nominee: Mike Pence"
+  - URL: https://www.metaculus.com/questions/7083
+  - URL: https://manifold.markets/jack/will-mike-pence-be-the-2024-republi
+  - URL: https://manifold.markets/PC/who-will-be-the-republican-presiden-7bf11c066154
+    YES_OPTION: "Mike Pence"
+  - URL: https://www.predictit.org/markets/detail/7053/Who-will-win-the-2024-Republican-presidential-nomination
+    YES_OPTION: "Mike Pence"
+
+
+# Democrat nominee
+- - TITLE: "2024 Democrat Nominee: Joe Biden"
+  - URL: https://futuur.com/q/155043/who-will-be-the-democratic-presidential-nominee-in-the-us-elections-of-2024
+    YES_OPTION: "Joe Biden"
+  - URL: https://www.metaculus.com/questions/5712
+  - URL: https://manifold.markets/NathanpmYoung/will-biden-be-the-2024-democratic-n
+  - URL: https://manifold.markets/Alonso/will-biden-be-the-2024-democratic-n-cccae55809bb
+  - URL: https://manifold.markets/JoshuaB/if-joe-biden-runs-for-the-2024-demo
+  - URL: https://www.predictit.org/markets/detail/7057/Who-will-win-the-2024-Democratic-presidential-nomination
     YES_OPTION: "Joe Biden"
 
-# Republican nominee: DeSantis
-- - URL: https://www.metaculus.com/questions/6590
-  - URL: https://manifold.markets/SG/will-ron-desantis-be-the-2024-repub
-  - URL: https://www.predictit.org/markets/detail/7053/Who-will-win-the-2024-Republican-presidential-nomination
-    YES_OPTION: "Ron DeSantis"
-  - URL: https://futuur.com/q/155042/who-will-be-the-republican-presidential-nominee-in-the-us-elections-of-2024
-    YES_OPTION: "Ron DeSantis"
+- - TITLE: "2024 Democrat Nominee: Gavin Newsom"
+  - URL: https://futuur.com/q/155043/who-will-be-the-democratic-presidential-nominee-in-the-us-elections-of-2024
+    YES_OPTION: "Gavin Newson"
+  - URL: https://www.metaculus.com/questions/11706
+  - URL: https://manifold.markets/MarketManagerBot/will-gavin-newsom-be-the-democratic
+  - URL: https://www.predictit.org/markets/detail/7057/Who-will-win-the-2024-Democratic-presidential-nomination
+    YES_OPTION: "Gavin Newsom"
+
+- - TITLE: "2024 Democrat Nominee: Kamala Harris"
+  - URL: https://futuur.com/q/155043/who-will-be-the-democratic-presidential-nominee-in-the-us-elections-of-2024
+    YES_OPTION: "Kamala Harris"
+  - URL: https://www.metaculus.com/questions/11704
+  - URL: https://manifold.markets/MarketManagerBot/will-kamala-harris-be-the-democrati
+  - URL: https://www.predictit.org/markets/detail/7057/Who-will-win-the-2024-Democratic-presidential-nomination
+    YES_OPTION: "Kamala Harris"
+
+- - TITLE: "2024 Democrat Nominee: Robert Kennedy Jr."
+  - URL: https://www.metaculus.com/questions/16526 
+  - URL: https://manifold.markets/Tripping/will-robert-f-kennedy-jr-be-the-dem
+
+  - URL: https://futuur.com/q/155043/who-will-be-the-democratic-presidential-nominee-in-the-us-elections-of-2024
+    YES_OPTION: "Robert F. Kennedy"
+  - URL: https://www.predictit.org/markets/detail/7057/Who-will-win-the-2024-Democratic-presidential-nomination
+    YES_OPTION: "Robert Kennedy Jr."
 
 # 2024 president: Trump
 - - URL: https://www.metaculus.com/questions/5717
@@ -187,3 +254,7 @@
 - - TITLE: "Will the writer's strike last 100 days?"
   - URL: https://manifold.markets/Gabrielle/will-the-hollywood-writer-strike-la#0swoKJosuMWXnibk8hgr
   - URL: https://futuur.com/q/175499/will-the-us-screenwriters-strike-last-at-least-100-days/
+
+- - TITLE: "Will Lula finish his term as president of brazil? (Dec. 31, 2026)"
+  - URL: https://manifold.markets/kenakofer/will-lula-finish-his-term-as-presid
+  - URL: https://futuur.com/q/166905/will-lula-finish-his-term-as-president-of-brazil
