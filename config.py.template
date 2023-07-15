@@ -4,3 +4,4 @@
 class Config:
     API_KEY = "YOUR API KEY HERE"
     MANIFOLD_USERNAME = "YourManifoldUsernameHere"
+    MANIFOLD_USER_ID = "Gao4isna5xkbxniXGdhOkanthinH"

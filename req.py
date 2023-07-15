@@ -16,9 +16,9 @@ URLS_EXPIRE_AFTER = {
     'api.futuur.com':                       3600,
 }
 session = requests_cache.CachedSession(
-    'cache/requests_cache', 
-    backend='sqlite', 
-    expire_after=3600, 
+    'cache/requests_cache',
+    backend='sqlite',
+    expire_after=3600,
     urls_expire_after=URLS_EXPIRE_AFTER,
     stale_if_error=True
     )
@@ -42,7 +42,7 @@ def clear_cache(platforms = None):
             print("Clearing cache for " + platform)
             # Get count of urls matching platform as we go
             count = 0
-            for url in session.cache.urls()[:]:
+            for url in list(session.cache.urls)[:]:
                 # Check for url in the domain name only. Don't clear slugs, those shouldn't change
                 if platform in url.split("/")[2] and not "/slug/" in url:
                     count += 1

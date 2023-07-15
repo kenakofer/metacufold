@@ -22,7 +22,7 @@ class Manifold(PredictionSite):
         self._slug = str(re.search(r"/([^/]+)$", url).group(1))
         self._market_id = str(market_id)
         self._details = None
-        self._all_positions = None
+        self._user_position = None
         self._summary = None
 
     def is_real_money(self):
@@ -41,24 +41,40 @@ class Manifold(PredictionSite):
         return self._details
 
     def user_position_shares(self, force_refresh=False):
-        username = C.MANIFOLD_USERNAME
-        if not self._all_positions or force_refresh:
-            self._all_positions = requests.get("https://manifold.markets/api/v0/market/" + self.market_id() + "/positions", invalidate_cache=force_refresh).json()
-            if not self._all_positions:
-                print("Error: Could not get position for market " + self.market_id())
-                return 0
-        for position in self._all_positions:
-            if position['userName'] == username:
-                totalShares = 0
-                if 'YES' in position['totalShares']:
-                    totalShares += position['totalShares']['YES']
-                if 'NO' in position['totalShares']:
-                    totalShares -= position['totalShares']['NO']
-                return totalShares
+        if self._user_position == None or force_refresh:
+            if self.is_binary():
+                all_positions = requests.get("https://manifold.markets/api/v0/market/" + self.market_id() + "/positions", invalidate_cache=force_refresh).json()
+                if not all_positions:
+                    print("Error: Could not get position for market " + self.market_id())
+                    return 0
+                for position in all_positions:
+                    if position['userName'] == C.MANIFOLD_USERNAME:
+                        totalShares = 0
+                        if 'YES' in position['totalShares']:
+                            totalShares += position['totalShares']['YES']
+                        if 'NO' in position['totalShares']:
+                            totalShares -= position['totalShares']['NO']
+                        self._user_position = totalShares
+                        return totalShares
+            elif self.is_multiple_choice():
+                user_bets = requests.get(f'https://manifold.markets/api/v0/bets?contractId={self.market_id()}&userId={C.MANIFOLD_USER_ID}').json()
+                answer_id = self._get_yes_answer_id()
+                running_total = 0
+                for bet in user_bets:
+                    if bet['answerId'] == answer_id:
+                        added_shares = bet['shares']
+                        if bet['outcome'] == 'NO':
+                            added_shares *= -1
+                        running_total += added_shares
+                self._user_position = running_total
+                return running_total
         return 0
 
     def title(self):
         return self.details()['question']
+
+    def _get_yes_answer_id(self):
+        return self._get_yes_option()['id']
 
     def _get_yes_option(self):
         if not 'answers' in self.details():
@@ -96,6 +112,9 @@ class Manifold(PredictionSite):
 
     def is_binary(self):
         return self.details()["outcomeType"].startswith("BINARY")
+
+    def is_multiple_choice(self):
+        return self.details()["outcomeType"].startswith("MULTIPLE_CHOICE")
 
     def is_open(self):
         return self.details()["closeTime"] > int(time()) * 1000
