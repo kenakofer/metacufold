@@ -20,8 +20,14 @@ class MetaculusBotGroup:
             return [line.strip() for line in file.readlines()]
 
 
-    def filtered_metaculus_arb_pairs():
+    def filtered_metaculus_arb_pairs(platforms  = None):
         ignore_markets = MetaculusBotGroup.get_ignore_markets_from_file()
+
+        # Filter to markets with lowercase class in platforms
+        if platforms:
+            if not "metaculus" in platforms or not "manifold" in platforms:
+                print("Excluding MetaculusBotGroup, as it requires both metaculus and manifold platforms")
+                return []
 
         """Get a list of all markets"""
         manifold_markets = [

@@ -70,7 +70,7 @@ class Manifold(PredictionSite):
                 print("Error: Could not find text in outcome: " + str(outcome))
             if outcome['text'].lower() == self._yes_option.lower():
                 return outcome
-        print("Error: Could not find yes option (" + self._yes_option + ") in Predictit market: " + self._url)
+        print("Error: Could not find yes option (" + self._yes_option + ") in Manifold market: " + self._url)
         print("Answers: " + str(self.details()['answers']))
         return None
 

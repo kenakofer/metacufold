@@ -40,7 +40,7 @@ def url_to_market(url, yes_option=None, no_option=None):
     else:
         raise Exception("Unknown URL: " + url)
 
-def arbs_from_yaml():
+def arbs_from_yaml(platforms = None):
     """ Example entry in the list, note the optional YES/NO under each URL:
     - - URL: https://manifold.markets/ACXBot/9-will-a-nuclear-weapon-be-used-in
     - URL: https://www.metaculus.com/questions/13933/10-deaths-from-nuclear-detonation-in-2023/
@@ -71,12 +71,18 @@ def arbs_from_yaml():
                 # Get the YES and NO options
                 yes = market_info.get("YES_OPTION", None)
                 no = market_info.get("NO_OPTION", None)
-                wiggles.append(market_info.get("WIGGLE", 0))
-                inverts.append(market_info.get("INVERT", False))
+                wiggle = market_info.get("WIGGLE", 0)
+                invert = market_info.get("INVERT", False)
                 # Create the market
                 market = url_to_market(url, yes_option=yes, no_option=no)
+                # Exclude market if not in platforms
+                if platforms and market.PLATFORM_NAME.lower() not in platforms:
+                    continue
+                # Ensure now that we can actually get the probability
                 market.probability()
                 markets.append(market)
+                wiggles.append(wiggle)
+                inverts.append(invert)
             arb = Arb(markets, wiggle_factors=wiggles, boost=boost, inverts=inverts, title=title)
             arbs.append(arb)
         return arbs
@@ -85,9 +91,9 @@ def arbs_from_yaml():
 
 
 def get_arbs_sorted_by_score(platforms):
-    arbs = MetaculusBotGroup.filtered_metaculus_arb_pairs()
+    arbs = MetaculusBotGroup.filtered_metaculus_arb_pairs(platforms)
     print(str(len(arbs)) + " valid market pairs found in Manifold's MetaculusBot group")
-    arbs += arbs_from_yaml()
+    arbs += arbs_from_yaml(platforms)
 
     # Filter to markets with lowercase class in platforms
     if platforms:
@@ -127,7 +133,7 @@ if __name__ == "__main__":
             sync(sys.argv[2:])
             sys.exit(0)
         elif sys.argv[1] == "clear-cache":
-            clear_cache()
+            clear_cache(sys.argv[2:])
             print("Cache cleared")
             sys.exit(0)
         elif sys.argv[1] == "bet-once":

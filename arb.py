@@ -11,14 +11,16 @@ NOVELTY_WEIGHT = 2.0
 
 class Arb:
     def __init__(self, markets, wiggle_factors=None, boost=0, inverts=None, title=None):
+        self._boost = boost
+        self._title = title
         if wiggle_factors is None:
             wiggle_factors = [0] * len(markets)
         if inverts is None:
             inverts = [False] * len(markets)
         assert len(markets) == len(wiggle_factors), "Number of markets and wiggle factors must be equal"
+
+        self._arb_score = None
         self._arb_markets = [ArbMarket(m, f, invert=i) for m, f, i in zip(markets, wiggle_factors, inverts)]
-        self._boost = boost
-        self._title = title
         self._resort()
 
     def title(self):
@@ -67,6 +69,12 @@ class Arb:
         if len(arb_markets) == 1:
             self._arb_score = 0
             return self._arb_score
+
+        elif len(arb_markets) == 0:
+            print("No markets in arb")
+            if self._title:
+                print("Title: " + self._title)
+            return -1
 
         markets = [am.market for am in arb_markets]
 
