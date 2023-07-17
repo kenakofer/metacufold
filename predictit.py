@@ -162,6 +162,9 @@ class Predictit(PredictionSite):
     def is_binary(self):
         return self._get_yes_option()
 
+    def can_bet_down(self):
+        return self.is_open()
+
     def is_open(self):
         deets = self.details()
         return deets['status'] == "Open"

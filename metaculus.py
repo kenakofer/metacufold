@@ -61,6 +61,9 @@ class Metaculus(PredictionSite):
         # Check for "OPEN" active_state
         return "active_state" in deets and deets["active_state"] == "OPEN"
 
+    def can_bet_down(self):
+        return self.is_open()
+
     def market_link(string):
         string = string.replace("/embed/", "/")
         # replace all // with / unless in https://

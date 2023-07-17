@@ -104,14 +104,17 @@ class Futuur(PredictionSite):
     def is_binary(self):
         return self._get_yes_option() and self._get_no_option()
 
+    def can_bet_down(self):
+        return self.is_binary() and self.is_open()
+
     def is_open(self):
         deets = self.details()
-        return self.is_binary() and \
-            not self._get_yes_option()['disabled'] and \
+        return not self._get_yes_option()['disabled'] and \
             not self._get_no_option()['disabled'] and \
             deets['wagerable'] and \
             deets['real_currency_available'] and \
             deets['resolution'] == None
+
 
 
     def _get_yes_option(self):

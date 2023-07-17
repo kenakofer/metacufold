@@ -39,6 +39,9 @@ class PredictionSite:
     def is_binary(self):
         raise NotImplementedError("Inheriting class must implement this")
 
+    def can_bet_down(self):
+        raise NotImplementedError("Inheriting class must implement this")
+
     def is_open(self):
         raise NotImplementedError("Inheriting class must implement this")
 

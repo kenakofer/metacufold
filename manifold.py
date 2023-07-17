@@ -48,6 +48,9 @@ class Manifold(PredictionSite):
                     print("Error: Could not get position for market " + self.market_id())
                     return 0
                 for position in all_positions:
+                    # Assert that position is a dict
+                    assert isinstance(position, dict) and 'userName' in position and 'totalShares' in position, "Bad position: " + str(position) + " from url " + self._url
+
                     if position['userName'] == C.MANIFOLD_USERNAME:
                         totalShares = 0
                         if 'YES' in position['totalShares']:
@@ -115,6 +118,9 @@ class Manifold(PredictionSite):
 
     def is_multiple_choice(self):
         return self.details()["outcomeType"].startswith("MULTIPLE_CHOICE")
+
+    def can_bet_down(self):
+        return self.is_open()
 
     def is_open(self):
         return self.details()["closeTime"] > int(time()) * 1000
