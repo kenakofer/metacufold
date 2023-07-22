@@ -25,8 +25,8 @@ def pretty_percent(arb_market):
     elif arb_market.order == Order.BOTTOM:
         string += Fore.RED + Style.BOLD
     prob = arb_market.probability()
-    if prob < .02 or prob > .98:
-        string += f'{round(prob*100, 2)}%'
+    if prob < .09 or prob > .91:
+        string += f'{round(prob*100, 1)}%'
     else:
         string += f'{round(prob*100)}%'
 

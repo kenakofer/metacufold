@@ -92,10 +92,10 @@ class Manifold(PredictionSite):
 
     def probability(self):
         if self._yes_option == None:
-            return round(self.details()['probability'], 2)
+            return self.details()['probability']
         else:
             yes_option = self._get_yes_option()
-            return round(yes_option['probability'], 2)
+            return yes_option['probability']
 
     def size(self):
         return self.details()['totalLiquidity']
