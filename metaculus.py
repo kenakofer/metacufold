@@ -2,6 +2,7 @@ from colored import Fore, Back, Style
 import req as requests
 from datetime import datetime
 from prediction_site import PredictionSite
+from config import Config as C
 import re
 
 from colorama import just_fix_windows_console
@@ -15,6 +16,7 @@ class Metaculus(PredictionSite):
         self._url = url
         self._market_id = str(re.search(r"questions/(\d+)", url).group(1))
         self._details = None
+        self._user_position_shares = None
 
     def is_real_money(self):
         return False
@@ -73,10 +75,29 @@ class Metaculus(PredictionSite):
             return None
         return str(match.group(0))
 
-    def user_position_shares(self, force_refresh=False):
-        # Not supported, default 0
-        return 0
-
+    def user_position_shares(self, force_refresh=False, error_value=0):
+        try:
+            if not self._user_position_shares:
+                url = 'https://www.metaculus.com/api2/predictions/?question=' + self._market_id + '&user=' + C.METACULUS_USER_ID
+                authorization_header = "Token " + C.METACULUS_API_KEY
+                headers = {'Authorization': authorization_header}
+                response_json = requests.get(url, headers=headers).json()
+                if len(response_json['results']) == 0 or len(response_json['results'][0]['predictions']) == 0:
+                    self._user_position_shares = 0
+                else:
+                    my_prob = response_json['results'][0]['predictions'][-1]['x']
+                    com_prob = self.probability()
+                    # We don't have actual position shares, but if our probability is above
+                    # the community's, we want that to be like a YES position. Subtract the
+                    # two and adjust for edginess
+                    difference = (my_prob - com_prob) * 100
+                    edginess_factor = 1 / ((my_prob + .03) * (com_prob + .03) * (1.03 - my_prob) * (1.03 - com_prob))
+                    self._user_position_shares = difference * edginess_factor
+            return self._user_position_shares
+        except Exception as e:
+            print("Error getting user position shares for market " + self._market_id + " from Metaculus")
+            print(e)
+            return error_value
 
     def color(self, text):
         # Green back, black text

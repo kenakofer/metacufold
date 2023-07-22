@@ -48,7 +48,7 @@ class PredictionSite:
     def market_link(string):
         raise NotImplementedError("Inheriting class must implement this")
 
-    def user_position_shares(self):
+    def user_position_shares(self, error_value=0):
         # If not supported, default 0
         return 0
 

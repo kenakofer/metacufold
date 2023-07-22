@@ -11,7 +11,13 @@ class MetaculusBotGroup:
 
     def metaculus_group_market_summaries():
         """Get a list of all markets"""
-        return requests.get(MetaculusBotGroup.METACULUS_GROUP_MARKETS_URL).json()
+        response = requests.get(MetaculusBotGroup.METACULUS_GROUP_MARKETS_URL)
+        try:
+            return response.json()
+        except:
+            print("Error: Could not get markets from Metaculus group: " + MetaculusBotGroup.METACULUS_GROUP_MARKETS_URL)
+            print(response)
+            return []
 
 
     def get_ignore_markets_from_file():

@@ -30,9 +30,14 @@ class Manifold(PredictionSite):
 
     def market_id(self):
         if not self._market_id:
-            if not self._summary:
-                self._summary = requests.get("https://manifold.markets/api/v0/slug/" + self._slug).json()
-            self._market_id = str(self._summary['id'])
+            try:
+                url = "https://manifold.markets/api/v0/slug/" + self._slug
+                if not self._summary:
+                    self._summary = requests.get("https://manifold.markets/api/v0/slug/" + self._slug).json()
+                self._market_id = str(self._summary['id'])
+            except:
+                print("Error: Could not get market id for " + url)
+                return None
         return self._market_id
 
     def details(self):
@@ -40,49 +45,41 @@ class Manifold(PredictionSite):
             self._details = requests.get("https://manifold.markets/api/v0/market/" + self.market_id()).json()
         return self._details
 
-    def user_position_shares(self, force_refresh=False):
-        if self._user_position == None or force_refresh:
-            if self.is_binary():
-                all_positions = requests.get("https://manifold.markets/api/v0/market/" + self.market_id() + "/positions", invalidate_cache=force_refresh).json()
-                if not all_positions:
-                    print("Error: Could not get position for market " + self.market_id())
-                    return 0
-                for position in all_positions:
-                    # Assert that position is a dict
-                    assert isinstance(position, dict) and 'userName' in position and 'totalShares' in position, "Bad position: " + str(position) + " from url " + self._url
-
-                    if position['userName'] == C.MANIFOLD_USERNAME:
-                        totalShares = 0
-                        if 'YES' in position['totalShares']:
-                            totalShares += position['totalShares']['YES']
-                        if 'NO' in position['totalShares']:
-                            totalShares -= position['totalShares']['NO']
-                        self._user_position = totalShares
-                        return totalShares
-            elif self.is_multiple_choice():
+    def user_position_shares(self, force_refresh=False, error_value=0):
+        try:
+            if self._user_position == None or force_refresh:
                 user_bets = requests.get(f'https://manifold.markets/api/v0/bets?contractId={self.market_id()}&userId={C.MANIFOLD_USER_ID}').json()
                 answer_id = self._get_yes_answer_id()
                 running_total = 0
                 for bet in user_bets:
-                    if bet['answerId'] == answer_id:
+                    if not 'answerId' in bet or bet['answerId'] == answer_id:
                         added_shares = bet['shares']
                         if bet['outcome'] == 'NO':
                             added_shares *= -1
                         running_total += added_shares
                 self._user_position = running_total
-                return running_total
-        return 0
+            return self._user_position
+        except Exception as e:
+            print("Could not get user position for market " + self.market_id())
+            print(e)
+            exit()
+            return error_value
 
     def title(self):
         return self.details()['question']
 
     def _get_yes_answer_id(self):
-        return self._get_yes_option()['id']
+        if self.is_multiple_choice():
+            return self._get_yes_option()['id']
+        return "undefined" # This is the actual string used in the API on binary questions
 
     def _get_yes_option(self):
         if not 'answers' in self.details():
-            print("Error: Could not find answers in Manifold question: " + self._url)
-            print("details: " + str(self.details()))
+            if self.is_multiple_choice():
+                print("Error: Could not find answers in Manifold question: " + self._url)
+                print("details: " + str(self.details()))
+            else:
+                return None
         for outcome in self.details()['answers']:
             # Compare case insesitive
             if not 'text' in outcome:

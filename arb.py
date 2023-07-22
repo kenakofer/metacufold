@@ -10,6 +10,11 @@ class Order:
 NOVELTY_WEIGHT = 2.0
 
 class Arb:
+
+    UP_SYMBOL="▲ "
+    DOWN_SYMBOL="▼ "
+    ERROR_SYMBOL="ERR"
+
     def __init__(self, markets, wiggle_factors=None, boost=0, inverts=None, title=None):
         self._boost = boost
         self._title = title
@@ -144,9 +149,19 @@ class ArbMarket:
             prob = 1 - prob
         return prob
 
-    def user_position_shares(self):
+    def user_position_shares(self, error_value=0):
         inversion_factor = -1 if self.invert else 1
-        return inversion_factor * self.market.user_position_shares()
+        return inversion_factor * self.market.user_position_shares(error_value=error_value)
+
+    def pretty_pos(self):
+        pos = self.user_position_shares(error_value=Arb.ERROR_SYMBOL)
+        if pos == Arb.ERROR_SYMBOL:
+            return Arb.ERROR_SYMBOL
+        # Should be a number otherwise
+        pos = round(pos)
+        if pos == 0:
+            return ""
+        return Arb.UP_SYMBOL + str(pos) if pos > 0 else Arb.DOWN_SYMBOL + str(-pos)
 
     def fee_adjustment(self, buying_yes=None):
         if buying_yes is None:

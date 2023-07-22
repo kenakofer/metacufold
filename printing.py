@@ -11,17 +11,9 @@ import tabulate
 from colorama import just_fix_windows_console
 just_fix_windows_console()
 
-UP_SYMBOL="▲ "
-DOWN_SYMBOL="▼ "
 CENT_SYMBOL="¢"
 CLOCK_SYMBOL="⏰ "
 
-
-def pretty_pos(arb_market):
-    pos = round(arb_market.user_position_shares())
-    if pos == 0:
-        return ""
-    return UP_SYMBOL + str(pos) if pos > 0 else DOWN_SYMBOL + str(-pos)
 
 def pretty_days(market):
     return str((market.close_time() - datetime.now()).days)
@@ -62,7 +54,7 @@ def print_arb(arb):
     table = [[pretty_percent(am),
               pretty_days(am.market),
               am.market.size_string(),
-              pretty_pos(am),
+              am.pretty_pos(),
               am.market.color(am.market.url())]
             for am in reversed_arb_markets]
     # print(tabulate.tabulate(table, headers=headers, tablefmt="fancy_grid"))
