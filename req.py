@@ -23,19 +23,26 @@ session = requests_cache.CachedSession(
     stale_if_error=True
     )
 
-def get(url, invalidate_cache=False):
+def get(url, invalidate_cache=False, headers=None):
     # If invalidate_cache is true, clear the cache for this url
     if invalidate_cache:
         print(" xx Invalidating cache for " + url)
         session.cache.delete_url(url)
-    r = session.get(url)
+    r = session.get(url, headers=headers)
     return r
 
 def clear_cache(platforms = None):
     if not platforms:
         # Clear the cache
         print("Clearing cache for all markets")
-        session.cache.clear()
+        # Get count of urls matching platform as we go
+        count = 0
+        for url in list(session.cache.urls)[:]:
+            # Don't clear slugs, those shouldn't change
+            if not "/slug/" in url:
+                count += 1
+                session.cache.delete_url(url)
+        print("Cleared " + str(count) + " urls.")
     else:
         # Clear the cache for each platform
         for platform in platforms:
