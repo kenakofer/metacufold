@@ -114,10 +114,10 @@ class Arb:
 
         # Position score: if I'm holding a Manifold position, but Metaculus is the other way, we want to know about that and probably sell the position.
         position_score = 1
-        if spread_score > 2:
+        if spread_score > .02:
             lower_shares = arb_markets[0].user_position_shares()
             upper_shares = arb_markets[-1].user_position_shares()
-            if lower_shares < 0 or upper_shares > 0:
+            if lower_shares < -1 or upper_shares > 1:
                 position_score = 10000
             elif lower_shares == 0 and upper_shares == 0:
                 position_score = NOVELTY_WEIGHT
