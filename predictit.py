@@ -3,6 +3,7 @@ import req as requests
 from datetime import datetime, timedelta
 from string import Template
 from prediction_site import PredictionSite
+from config import Config as C
 import json
 import re
 
@@ -92,8 +93,8 @@ class Predictit(PredictionSite):
         # Use regex to grab the number after the detail/ and before the /
         self._market_id = str(re.search(r"detail/([^/]+)", url).group(1))
         self._details = None
-        self._yes_option = yes_option
-        self._no_option = no_option
+        self._yes_option = yes_option.lower()
+        self._no_option = no_option.lower()
         self._total_shares_traded = None
 
     def is_real_money(self):
@@ -106,7 +107,7 @@ class Predictit(PredictionSite):
         return self._details
 
     def title(self):
-        return self.details()['name']
+        return self.details()['shortName']
 
     def probability(self):
         yes_option = self._get_yes_option()
@@ -185,3 +186,86 @@ class Predictit(PredictionSite):
 
     def color(self, text):
         return Back.DARK_BLUE + Fore.WHITE + Style.BOLD + text + Style.reset
+
+    def user_position_shares(self, force_refresh=False, error_value=0):
+        # Check for the title in all positions
+        try:
+            all_positions = Predictit._get_all_positions()
+            title = self.title().lower()
+            option = self._yes_option.lower()
+            if title in all_positions and option in all_positions[title]:
+                return all_positions[title][option]['shares']
+            else:
+                return 0
+        except Exception as e:
+            print("Error getting user position shares:")
+            print(e)
+            return error_value
+
+
+
+    from selenium_cache import memoize
+    @memoize(expire=3600)
+    def _get_all_positions():
+        from selenium import webdriver
+        from selenium.webdriver.common.by import By
+        from selenium.webdriver.support.wait import WebDriverWait
+
+        driver = webdriver.Firefox()
+
+        # Navigate to PredictIt homepage
+        driver.get("https://www.predictit.org")
+
+        # Click on the "Log In" button (id=login)
+        driver.find_element(By.ID, "login").click()
+
+        # Fill in the email input (id=username)
+        driver.find_element(By.ID, "username").send_keys(C.SELENIUM_PREDICTIT_EMAIL)
+
+        # Fill in the password input (id=password)
+        driver.find_element(By.ID, "password").send_keys(C.SELENIUM_PREDICTIT_PASSWORD)
+
+        # Hit the submit button
+        driver.find_element(By.CSS_SELECTOR, "button[type=submit]").click()
+
+        # We should be on the dashboard by default
+
+        # Wait for, and then click the "Open All" button (class=dashboard-markets-toggle__button) once it exists
+        WebDriverWait(driver, 10).until(lambda driver: driver.find_element(By.CLASS_NAME, "dashboard-markets-toggle__button")).click()
+
+        market_info = {}
+
+        # Loop over every div inside the portfolio (class=portfolio-my-markets__item)
+        for market in driver.find_elements(By.CLASS_NAME, "portfolio-my-markets__item"):
+            # The market title is the text in the "market-list-item-expandable__desktop-title-text" div
+            market_title = market.find_element(By.CLASS_NAME, "market-list-item-expandable__desktop-title-text").text
+            # Loop over every option listed in the market (class=market-contract-horizontal-v2--dashboard)
+            for option in market.find_elements(By.CLASS_NAME, "market-contract-horizontal-v2--dashboard"):
+                # Get the option title text from market-contract-horizontal-v2__content-item-1
+                option_title = option.find_element(By.CLASS_NAME, "market-contract-horizontal-v2__content-item-1").text
+                # Get the share count element market-contract-horizontal-v2__content-item-3
+                share_count_element = option.find_element(By.CLASS_NAME, "market-contract-horizontal-v2__content-item-3")
+                # They are NO shares if there is a span with class "market-shares-bar--no"
+                shares_are_no = share_count_element.find_elements(By.CLASS_NAME, "market-shares-bar--no")
+                # The text holds the number of shares
+                shares = int(share_count_element.text)
+                # Multiply by -1 if not YES shares
+                if shares_are_no:
+                    shares *= -1
+
+                market_title = market_title.lower()
+                option_title = option_title.lower()
+
+                # Add the market to the market_info dict if it doesn't exist
+                if not market_title in market_info:
+                    market_info[market_title] = {}
+                # Add the option to the market_info dict if it doesn't exist
+                market_info[market_title][option_title] = {"shares": shares}
+
+        # Close the browser
+        driver.close()
+
+        return market_info
+
+if __name__ == "__main__":
+    print(Predictit._get_all_positions())

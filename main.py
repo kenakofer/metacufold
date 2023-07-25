@@ -13,7 +13,8 @@ from futuur import Futuur
 from predictit import Predictit
 from metaculus_bot_group import MetaculusBotGroup
 from printing import print_arb
-from req import clear_cache, get, session
+from req import clear_cache, get
+from selenium_cache import clear_cache as clear_selenium_cache
 
 def sync(platforms):
     get_arbs_sorted_by_score(platforms)
@@ -134,6 +135,9 @@ if __name__ == "__main__":
             sys.exit(0)
         elif sys.argv[1] == "clear-cache":
             clear_cache(sys.argv[2:])
+            if (sys.argv[2:] and "selenium" in sys.argv[2:]):
+                clear_selenium_cache()
+                print("Selenium cache cleared")
             print("Cache cleared")
             sys.exit(0)
         elif sys.argv[1] == "bet-once":
