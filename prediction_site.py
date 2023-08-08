@@ -1,5 +1,7 @@
 class PredictionSite:
 
+    PLATFORM_NAME = "PLATFORM_NAME NOT_SET"
+
     def __init__(self):
         raise NotImplementedError("Inheriting class must implement this")
 
