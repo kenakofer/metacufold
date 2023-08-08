@@ -194,7 +194,7 @@ class Predictit(PredictionSite):
             title = self.title().lower()
             option = self._yes_option.lower()
             if title in all_positions and option in all_positions[title]:
-                return all_positions[title][option]['shares']
+                return 100 * all_positions[title][option]['shares']
             else:
                 return 0
         except Exception as e:
@@ -230,8 +230,15 @@ class Predictit(PredictionSite):
 
         # We should be on the dashboard by default
 
-        # Wait for, and then click the "Open All" button (class=dashboard-markets-toggle__button) once it exists
-        WebDriverWait(driver, 10).until(lambda driver: driver.find_element(By.CLASS_NAME, "dashboard-markets-toggle__button")).click()
+        try:
+            # Wait for, and then click the "Open All" button (class=dashboard-markets-toggle__button) once it exists
+            WebDriverWait(driver, 10).until(lambda driver: driver.find_element(By.CLASS_NAME, "dashboard-markets-toggle__button")).click()
+        except:
+            # Have the driver wait 2 seconds, then try again
+            driver.implicitly_wait(2)
+            driver.find_element(By.CLASS_NAME, "dashboard-markets-toggle__button").click()
+
+
 
         market_info = {}
 
