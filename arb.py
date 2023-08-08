@@ -86,6 +86,7 @@ class Arb:
         # Size score is the product of the sizes of the markets, root the number of markets
         size_score = reduce(lambda x, y: x * y, [m.size() for m in markets], 1)
         size_score **= (1 / len(markets))
+        assert size_score >= 0, "Size score must be positive. Markets: " + str(markets)
 
         bound = lambda x: min(max(x, 0.005), 0.995)
 
@@ -106,11 +107,16 @@ class Arb:
         else:
             spread_score = upper - lower # Upper - Lower should not be negative in this branch
 
+        assert spread_score >= 0, "Spread score must be positive. Markets: " + str(markets)
+
         # Edging score: if the markets are close to 0 or 1, that's good
         edginess_score = 1 / ((upper + .02) * (lower + .02) * (1.02 - upper) * (1.02 - lower))
+        edginess_score = max(0, edginess_score)
+
 
         # Immanence score (if it closes sooner, it's better)
         immanence_score = 3600 * 24 * 365 / (markets[0].close_time() - datetime.now()).total_seconds()
+        immanence_score = max(.01, immanence_score)
 
         # Position score: if I'm holding a Manifold position, but Metaculus is the other way, we want to know about that and probably sell the position.
         position_score = 1
@@ -122,7 +128,7 @@ class Arb:
             elif lower_shares == 0 and upper_shares == 0:
                 position_score = NOVELTY_WEIGHT
 
-        self._arb_score = size_score * spread_score**3 * edginess_score * immanence_score**.5 * position_score
+        self._arb_score = 100 * size_score**.5 * spread_score**3 * edginess_score**.5 * immanence_score**.5 * position_score
         self._arb_score_breakdown = {
             'size': round(size_score, 2),
             'spread': round(spread_score, 2),
