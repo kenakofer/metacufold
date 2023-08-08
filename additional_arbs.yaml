@@ -149,6 +149,8 @@
     YES_OPTION: "Donald Trump"
   - URL: https://www.predictit.org/markets/detail/7053/Who-will-win-the-2024-Republican-presidential-nomination
     YES_OPTION: "Donald Trump"
+  - URL: https://manifold.markets/Stralor/who-will-be-the-republican-presiden-98de0c6d37f0
+    YES_OPTION: "Donald Trump"
   - URL: https://futuur.com/q/155042/who-will-be-the-republican-presidential-nominee-in-the-us-elections-of-2024
     YES_OPTION: "Donald Trump"
 
@@ -160,6 +162,8 @@
   - URL: https://manifold.markets/PC/who-will-be-the-republican-presiden-7bf11c066154
     YES_OPTION: "Ron DeSantis"
   - URL: https://www.predictit.org/markets/detail/7053/Who-will-win-the-2024-Republican-presidential-nomination
+    YES_OPTION: "Ron DeSantis"
+  - URL: https://manifold.markets/Stralor/who-will-be-the-republican-presiden-98de0c6d37f0
     YES_OPTION: "Ron DeSantis"
   - URL: https://futuur.com/q/155042/who-will-be-the-republican-presidential-nominee-in-the-us-elections-of-2024
     YES_OPTION: "Ron DeSantis"
@@ -178,6 +182,8 @@
     YES_OPTION: "Nikki Haley"
   - URL: https://www.predictit.org/markets/detail/7053/Who-will-win-the-2024-Republican-presidential-nomination
     YES_OPTION: "Nikki Haley"
+  - URL: https://manifold.markets/Stralor/who-will-be-the-republican-presiden-98de0c6d37f0
+    YES_OPTION: "Nikki Haley"
   - URL: https://futuur.com/q/155042/who-will-be-the-republican-presidential-nominee-in-the-us-elections-of-2024
     YES_OPTION: "Nikki Haley"
 
@@ -185,6 +191,8 @@
   - URL: https://www.metaculus.com/questions/7083
   - URL: https://manifold.markets/jack/will-mike-pence-be-the-2024-republi
   - URL: https://manifold.markets/PC/who-will-be-the-republican-presiden-7bf11c066154
+    YES_OPTION: "Mike Pence"
+  - URL: https://manifold.markets/Stralor/who-will-be-the-republican-presiden-98de0c6d37f0
     YES_OPTION: "Mike Pence"
   - URL: https://www.predictit.org/markets/detail/7053/Who-will-win-the-2024-Republican-presidential-nomination
     YES_OPTION: "Mike Pence"
@@ -198,6 +206,10 @@
   - URL: https://manifold.markets/NathanpmYoung/will-biden-be-the-2024-democratic-n
   - URL: https://manifold.markets/Alonso/will-biden-be-the-2024-democratic-n-cccae55809bb
   - URL: https://manifold.markets/JoshuaB/if-joe-biden-runs-for-the-2024-demo
+  - URL: https://manifold.markets/MichaelWheatley/who-will-win-the-us-2024-democratic
+    YES_OPTION: "Joe Biden"
+  - URL: https://manifold.markets/Stralor/who-will-be-the-democratic-nominee-bc1bf10138e1
+    YES_OPTION: "Joe Biden"
   - URL: https://www.predictit.org/markets/detail/7057/Who-will-win-the-2024-Democratic-presidential-nomination
     YES_OPTION: "Joe Biden"
 
@@ -206,6 +218,10 @@
     YES_OPTION: "Gavin Newson"
   - URL: https://www.metaculus.com/questions/11706
   - URL: https://manifold.markets/MarketManagerBot/will-gavin-newsom-be-the-democratic
+  - URL: https://manifold.markets/MichaelWheatley/who-will-win-the-us-2024-democratic
+    YES_OPTION: "Gavin Newsom"
+  - URL: https://manifold.markets/Stralor/who-will-be-the-democratic-nominee-bc1bf10138e1
+    YES_OPTION: "Gavin Newsom"
   - URL: https://www.predictit.org/markets/detail/7057/Who-will-win-the-2024-Democratic-presidential-nomination
     YES_OPTION: "Gavin Newsom"
 
@@ -214,15 +230,22 @@
     YES_OPTION: "Kamala Harris"
   - URL: https://www.metaculus.com/questions/11704
   - URL: https://manifold.markets/MarketManagerBot/will-kamala-harris-be-the-democrati
+  - URL: https://manifold.markets/MichaelWheatley/who-will-win-the-us-2024-democratic
+    YES_OPTION: "Kamala Harris"
+  - URL: https://manifold.markets/Stralor/who-will-be-the-democratic-nominee-bc1bf10138e1
+    YES_OPTION: "Kamala Harris"
   - URL: https://www.predictit.org/markets/detail/7057/Who-will-win-the-2024-Democratic-presidential-nomination
     YES_OPTION: "Kamala Harris"
 
 - - TITLE: "2024 Democrat Nominee: Robert Kennedy Jr."
   - URL: https://www.metaculus.com/questions/16526
   - URL: https://manifold.markets/Tripping/will-robert-f-kennedy-jr-be-the-dem
-
+  - URL: https://manifold.markets/MichaelWheatley/who-will-win-the-us-2024-democratic
+    YES_OPTION: "Robert F. Kennedy Jr."
   - URL: https://futuur.com/q/155043/who-will-be-the-democratic-presidential-nominee-in-the-us-elections-of-2024
     YES_OPTION: "Robert F. Kennedy"
+  - URL: https://manifold.markets/Stralor/who-will-be-the-democratic-nominee-bc1bf10138e1
+    YES_OPTION: "Robert F. Kennedy, Jr."
   - URL: https://www.predictit.org/markets/detail/7057/Who-will-win-the-2024-Democratic-presidential-nomination
     YES_OPTION: "Robert Kennedy Jr."
 
@@ -270,3 +293,29 @@
   - URL: https://manifold.markets/MetaculusBot/will-hunter-biden-be-indicted-befor-c928ea76a254
   - URL: https://manifold.markets/dadonk/will-hunter-biden-be-indicted-befor
   - URL: https://www.metaculus.com/questions/10541/hunter-biden-be-indicted-before-nov-5-2024/
+
+- - TITLE: Superconductor replication
+  - URL: https://manifold.markets/Lorenzo/will-we-have-the-first-roomtemperat
+  - URL: https://manifold.markets/QuantumObserver/will-the-lk99-room-temp-ambient-pre
+  - URL: https://manifold.markets/jack/will-the-room-temp-superconductor-p
+  - URL: https://manifold.markets/fortenforge/is-the-room-temperature-superconduc
+  - URL: https://manifold.markets/StrayClimb/will-the-lk99-room-temp-ambient-pre-17fc7cb7a2a0
+  - URL: https://manifold.markets/waterlubber/will-the-roomtemperature-supercondu
+
+- - TITLE: Democrats win 2024 POTUS
+  - URL: https://manifold.markets/samb/will-the-democrats-win-the-2024-us
+  - URL: https://manifold.markets/AmmonLam/will-the-democratic-party-win-the-2
+  - URL: https://manifold.markets/BoltonBailey/will-a-democrat-win-the-white-house
+  - URL: https://manifold.markets/Gigacasting/will-a-democrat-win-the-2024-electi
+  - URL: https://manifold.markets/SG/will-a-democrat-win-the-2024-us-pre
+
+
+- - TITLE: Nuclear detonation before 2024?
+  - URL: https://manifold.markets/itsTomekK/will-a-nuclear-weapon-be-detonated-41dfff460cab
+  - URL: https://manifold.markets/Gigacasting/will-a-nuclear-weapon-be-detonated-b71e74f6a8e4
+  - URL: https://manifold.markets/IsaacKing/will-any-nuclear-weapon-be-detonate
+  - URL: https://manifold.markets/metabro/will-a-nuclear-weapon-be-detonated-6255c9b478b3
+  - URL: https://manifold.markets/ACXBot/8-will-a-nuclear-weapon-be-detonate
+  - URL: https://manifold.markets/jack/will-a-nuclear-weapon-be-detonated-af0ba4d66245
+  - URL: https://www.metaculus.com/questions/13931/nuclear-detonation-in-2023/
+  - BOOST: 10
