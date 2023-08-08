@@ -29,7 +29,24 @@ def get(url, invalidate_cache=False, headers=None):
         print(" xx Invalidating cache for " + url)
         session.cache.delete_url(url)
     r = session.get(url, headers=headers)
+    # Was r cached?
+    if r.from_cache:
+        pass
+    else:
+        print(" >> " + url + " was not cached")
     return r
+
+
+# This is necessary because it's callable on Windows, and just a list on linux
+def _get_urls_list():
+    # Check if session.cache.urls is a list or function
+    if callable(session.cache.urls):
+        # If it's a function, call it to get the list of urls
+        return list(session.cache.urls())
+    else:
+        # If it's a list, just return it
+        return list(session.cache.urls)[:]
+
 
 def clear_cache(platforms = None):
     if not platforms:
@@ -37,7 +54,7 @@ def clear_cache(platforms = None):
         print("Clearing cache for all markets")
         # Get count of urls matching platform as we go
         count = 0
-        for url in list(session.cache.urls)[:]:
+        for url in _get_urls_list():
             # Don't clear slugs, those shouldn't change
             if not "/slug/" in url:
                 count += 1
@@ -49,7 +66,7 @@ def clear_cache(platforms = None):
             print("Clearing cache for " + platform)
             # Get count of urls matching platform as we go
             count = 0
-            for url in list(session.cache.urls)[:]:
+            for url in _get_urls_list():
                 # Check for url in the domain name only. Don't clear slugs, those shouldn't change
                 if platform in url.split("/")[2] and not "/slug/" in url:
                     count += 1

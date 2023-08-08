@@ -13,6 +13,8 @@ class MetaculusBotGroup:
         """Get a list of all markets"""
         response = requests.get(MetaculusBotGroup.METACULUS_GROUP_MARKETS_URL)
         try:
+            result = response.json()
+            print("Found " + str(len(result)) + " markets in Metaculus group")
             return response.json()
         except:
             print("Error: Could not get markets from Metaculus group: " + MetaculusBotGroup.METACULUS_GROUP_MARKETS_URL)
@@ -23,7 +25,7 @@ class MetaculusBotGroup:
     def get_ignore_markets_from_file():
         """Get a list of markets to ignore"""
         with open("ignore_markets.txt", "r") as file:
-            return [line.strip() for line in file.readlines()]
+            return set([line.strip() for line in file.readlines() if not line.startswith("#")])
 
 
     def filtered_metaculus_arb_pairs(platforms  = None):
@@ -45,9 +47,13 @@ class MetaculusBotGroup:
             and m["url"] not in ignore_markets
         ]
 
+        print("After filtering, " + str(len(manifold_markets)) + " markets remain in Metaculus group")
+
         arbs = []
 
         for man_market in manifold_markets:
+            # Print a . for each market
+            print(".", end="", flush=True)
             # Search for a Metaculus link in the description
             metaculus_link = MetaculusBotGroup.search_for_metaculus_link(man_market.details()["description"])
 
@@ -61,6 +67,9 @@ class MetaculusBotGroup:
 
             metaculus_link = metaculus_link.replace("/embed/", "/")
             metaculus_link = metaculus_link.replace("www.", "")
+
+            if metaculus_link in ignore_markets:
+                continue
 
             metaculus_market = Metaculus(metaculus_link)
 
@@ -86,6 +95,7 @@ class MetaculusBotGroup:
 
             arbs.append(Arb([man_market, metaculus_market]))
 
+        print("Returning " + str(len(arbs)) + " suitable arbs from Metaculus group")
         return arbs
 
     # search recursively in 'description' for 'href': 'metaculus.com/questions/'
