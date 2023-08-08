@@ -54,5 +54,10 @@ class PredictionSite:
         # If not supported, default 0
         return 0
 
+    def open_url(self):
+        import webbrowser
+        webbrowser.open(self.url())
+
+
     def __str__(self):
         return self.title() + " (" + self.url() + ")"

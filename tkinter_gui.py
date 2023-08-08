@@ -3,6 +3,8 @@
 # Imports
 import tkinter as tk
 from tkinter import ttk
+from printing import pretty_percent
+import webbrowser
 
 class TkinterGUI:
     def __init__(self, arbs, platforms):
@@ -41,8 +43,29 @@ class TkinterGUI:
         # Update scroll region now that the widgets are packed
         arb_grid_canvas.configure(scrollregion=arb_grid_canvas.bbox("all"))
 
+    def activate_row(tree, event):
+        row = tree.identify_row(event.y)
+        column = tree.identify_column(event.x)
+        print(event, column, row)
+        if column == '#7':
+            # Get the row's url value
+            if row != '':
+                url = tree.item(row)['values'][6]
+                # Open the url in a browser
+                webbrowser.open(url)
+            else:
+                # Open every row's url
+                for row in tree.get_children():
+                    url = tree.item(row)['values'][6]
+                    webbrowser.open(url)
+
+
     def create_arb_table(self, arb, arb_grid_canvas_frame):
-        columns = ('platform', 'title', 'odds', 'stake', 'url')
+        REFRESH_SYMBOL="↻ "
+
+        columns = ('refresh', 'platform', 'title', 'size', 'odds', 'stake', 'url')
+        headers = (REFRESH_SYMBOL, '', 'Title', 'Size', 'Odds', 'Stake', 'URL')
+        column_widths = (30, 30, 300, 60, 60, 70, 30)
 
         # Create the table with the specified columns
         arb_table = ttk.Treeview(
@@ -52,28 +75,36 @@ class TkinterGUI:
 
         )
 
-        for column in columns:
-            arb_table.heading(column, text=column)
+        for column, width, header in zip(columns, column_widths, headers):
+            arb_table.heading(column, text=header)
+            arb_table.column(column, width=width)
 
         # Populate the table with the data in the arb markets
-        for market in arb.markets():
+        for i, am in enumerate(arb.arb_markets()[::-1]):
             # Insert the market into the table
             arb_table.insert(
                 parent='',
                 index='end',
-                iid=market.market_id,
+                iid=i,
+                tag=i,
                 values=(
-                    market.PLATFORM_NAME,
-                    market.title(),
-                    market.probability(),
-                    market.user_position_shares(),
-                    market.url()
+                    REFRESH_SYMBOL,
+                    am.market.PLATFORM_NAME,
+                    am.market.title(),
+                    am.market.size_string(),
+                    pretty_percent(am, color=False),
+                    am.pretty_pos(),
+                    am.market.url()
                 )
             )
 
+        # Double clicking the row opens the market in a browser
+        arb_table.bind('<Double-1>', lambda e: TkinterGUI.activate_row(arb_table, e))
+        arb_table.bind('<Button-1>', lambda e: TkinterGUI.activate_row(arb_table, e))
+        arb_table.bind('<Return>', lambda e: TkinterGUI.activate_row(arb_table, e))
+
         # Remove extra vertical space under the entries
         arb_table.configure(height=len(arb.markets())+1)
-
 
         return arb_table
 

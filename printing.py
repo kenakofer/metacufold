@@ -18,12 +18,13 @@ CLOCK_SYMBOL="⏰ "
 def pretty_days(market):
     return str((market.close_time() - datetime.now()).days)
 
-def pretty_percent(arb_market):
+def pretty_percent(arb_market, color=True):
     string = ""
-    if arb_market.order == Order.TOP:
-        string += Fore.GREEN + Style.BOLD
-    elif arb_market.order == Order.BOTTOM:
-        string += Fore.RED + Style.BOLD
+    if color:
+        if arb_market.order == Order.TOP:
+            string += Fore.GREEN + Style.BOLD
+        elif arb_market.order == Order.BOTTOM:
+            string += Fore.RED + Style.BOLD
     prob = arb_market.probability()
     if prob < .09 or prob > .91:
         string += f'{round(prob*100, 1)}%'
@@ -38,7 +39,7 @@ def pretty_percent(arb_market):
         if wiggle_adj != 0:
             string += f'{"+" if wiggle_adj > 0 else ""}{round(wiggle_adj*100)}w'
 
-    string += Style.reset
+    string += Style.reset if color else ""
     return string
 
 
