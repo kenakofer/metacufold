@@ -100,10 +100,10 @@ class Predictit(PredictionSite):
     def is_real_money(self):
         return True
 
-    def details(self):
-        if not self._details:
+    def details(self, invalidate_cache=False):
+        if not self._details or invalidate_cache:
             details_url = Predictit.API_TEMPLATE.substitute(id=self.market_id())
-            self._details = requests.get(details_url).json()
+            self._details = requests.get(details_url, invalidate_cache=invalidate_cache).json()
         return self._details
 
     def title(self):
@@ -187,7 +187,7 @@ class Predictit(PredictionSite):
     def color(self, text):
         return Back.DARK_BLUE + Fore.WHITE + Style.BOLD + text + Style.reset
 
-    def user_position_shares(self, force_refresh=False, error_value=0):
+    def user_position_shares(self, invalidate_cache=False, error_value=0):
         # Check for the title in all positions
         try:
             all_positions = Predictit._get_all_positions()

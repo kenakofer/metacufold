@@ -18,7 +18,7 @@ URLS_EXPIRE_AFTER = {
 session = requests_cache.CachedSession(
     'cache/requests_cache',
     backend='sqlite',
-    expire_after=3600,
+    expire_after=3600 * 3,
     urls_expire_after=URLS_EXPIRE_AFTER,
     stale_if_error=True
     )

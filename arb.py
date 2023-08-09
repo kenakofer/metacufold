@@ -51,6 +51,10 @@ class Arb:
             self._arb_score = None
         self._arb_score = self.score()
 
+    def refresh(self, index):
+        self._arb_markets[index].market.refresh()
+        self._resort()
+
     def remove_market(self, market):
         if isinstance(market, ArbMarket):
             self.remove_market(market.market)

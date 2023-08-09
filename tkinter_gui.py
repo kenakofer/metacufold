@@ -6,6 +6,8 @@ from tkinter import ttk
 from printing import pretty_percent
 import webbrowser
 
+REFRESH_SYMBOL="↻ "
+
 class TkinterGUI:
     def __init__(self, arbs, platforms):
         self.arbs = arbs
@@ -13,6 +15,20 @@ class TkinterGUI:
         self.root = tk.Tk()
         self.root.title("Arb Finder")
         self.root.geometry("1000x800")
+
+        # Configure dark theme
+        s = ttk.Style()
+        s.configure("Treeview",
+            background="black",
+            foreground="white",
+            fieldbackground="black"
+        )
+
+        s.configure("Treeview.Heading",
+            background="#555555",
+            foreground="white"
+        )
+
         self.create_arb_grid(arbs)
         self.root.mainloop()
 
@@ -36,8 +52,10 @@ class TkinterGUI:
 
         scroll_function = lambda e: print(e)
 
-        arb_tables = [self.create_arb_table(arb, arb_grid_canvas_frame) for arb in arbs]
-        for arb_table in arb_tables:
+        arb_tables = []
+        for arb in arbs:
+            arb_table = self.create_arb_table(arb.title(), arb_grid_canvas_frame)
+            TkinterGUI.repopulate_arb_table(arb_table, arb)
             arb_table.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
         # Update scroll region now that the widgets are packed
@@ -48,23 +66,30 @@ class TkinterGUI:
         column = tree.identify_column(event.x)
         print(event, column, row)
         if column == '#7':
-            # Get the row's url value
             if row != '':
                 url = tree.item(row)['values'][6]
-                # Open the url in a browser
                 webbrowser.open(url)
             else:
                 # Open every row's url
                 for row in tree.get_children():
                     url = tree.item(row)['values'][6]
                     webbrowser.open(url)
+        elif column == '#1':
+            if row != '':
+                print("Refreshing " + str(row))
+                tree.arb.refresh(int(row))
+            else:
+                # Refresh every row
+                for row in tree.get_children():
+                    print("Refreshing " + str(row))
+                    tree.arb.refresh(int(row))
+            TkinterGUI.repopulate_arb_table(tree, tree.arb)
 
 
-    def create_arb_table(self, arb, arb_grid_canvas_frame):
-        REFRESH_SYMBOL="↻ "
 
+    def create_arb_table(self, title, arb_grid_canvas_frame):
         columns = ('refresh', 'platform', 'title', 'size', 'odds', 'stake', 'url')
-        headers = (REFRESH_SYMBOL, '', 'Title', 'Size', 'Odds', 'Stake', 'URL')
+        headers = (REFRESH_SYMBOL, '', title, 'Size', 'Odds', 'Stake', 'URL')
         column_widths = (30, 30, 300, 60, 60, 70, 30)
 
         # Create the table with the specified columns
@@ -72,21 +97,36 @@ class TkinterGUI:
             arb_grid_canvas_frame,
             columns = columns,
             show = 'headings' # Hides a weird empty column
-
         )
+
+        # Use a dark background color and white text
+        # arb_table.tag_configure('oddrow', background='#222222')
+        # arb_table.tag_configure('evenrow', background='#333333')
+        # arb_table.tag_configure('oddrow', foreground='#eeeeee')
+        # arb_table.tag_configure('evenrow', foreground='#eeeeee')
 
         for column, width, header in zip(columns, column_widths, headers):
             arb_table.heading(column, text=header)
             arb_table.column(column, width=width)
 
+        return arb_table
+
+    def repopulate_arb_table(arb_table, arb):
+
+        # Delete any rows that are already in the table
+        arb_table.delete(*arb_table.get_children())
+
+        # Store the arb on the table object
+        arb_table.arb = arb
+
         # Populate the table with the data in the arb markets
-        for i, am in enumerate(arb.arb_markets()[::-1]):
+        for i, am in enumerate(arb.arb_markets()):
             # Insert the market into the table
             arb_table.insert(
                 parent='',
-                index='end',
+                index=0,
                 iid=i,
-                tag=i,
+                tag=[i, 'oddrow' if i%2 else 'evenrow'],
                 values=(
                     REFRESH_SYMBOL,
                     am.market.PLATFORM_NAME,
@@ -106,7 +146,11 @@ class TkinterGUI:
         # Remove extra vertical space under the entries
         arb_table.configure(height=len(arb.markets())+1)
 
-        return arb_table
+        # Use a dark background color and white text
+        arb_table.tag_configure('oddrow', background='#222222')
+        arb_table.tag_configure('evenrow', background='#333333')
+        arb_table.tag_configure('oddrow', foreground='#ffffff')
+        arb_table.tag_configure('evenrow', foreground='#ffffff')
 
 
 if __name__ == '__main__':

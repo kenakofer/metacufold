@@ -21,10 +21,10 @@ class Metaculus(PredictionSite):
     def is_real_money(self):
         return False
 
-    def details(self):
-        if not self._details:
+    def details(self, invalidate_cache=False):
+        if not self._details or invalidate_cache:
             deets_url = "https://www.metaculus.com/api2/questions/" + self._market_id
-            self._details = requests.get(deets_url).json()
+            self._details = requests.get(deets_url, invalidate_cache=invalidate_cache).json()
             if not self._details or ('detail' in self._details and self._details['detail'] == "Not found."):
                 print("Error: Could not get details for market " + self._market_id + " from " + deets_url)
                 return None
@@ -75,7 +75,7 @@ class Metaculus(PredictionSite):
             return None
         return str(match.group(0))
 
-    def user_position_shares(self, force_refresh=False, error_value=0):
+    def user_position_shares(self, invalidate_cache=False, error_value=0):
         try:
             if not self._user_position_shares:
                 url = 'https://www.metaculus.com/api2/predictions/?question=' + self._market_id + '&user=' + C.METACULUS_USER_ID

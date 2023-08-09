@@ -60,10 +60,10 @@ class Futuur(PredictionSite):
     def is_real_money(self):
         return True
 
-    def details(self):
-        if not self._details:
+    def details(self, invalidate_cache=False):
+        if not self._details or invalidate_cache:
             details_url = Futuur.API_TEMPLATE.substitute(id=self.market_id())
-            self._details = requests.get(details_url).json()
+            self._details = requests.get(details_url, invalidate_cache=invalidate_cache).json()
         return self._details
 
     def title(self):
