@@ -3,7 +3,7 @@
 # Imports
 import tkinter as tk
 from tkinter import ttk
-from printing import pretty_percent
+from printing import pretty_percent, pretty_days
 import webbrowser
 
 REFRESH_SYMBOL="↻ "
@@ -88,9 +88,9 @@ class TkinterGUI:
 
 
     def create_arb_table(self, title, arb_grid_canvas_frame):
-        columns = ('refresh', 'platform', 'title', 'size', 'odds', 'stake', 'url')
-        headers = (REFRESH_SYMBOL, '', title, 'Size', 'Odds', 'Stake', 'URL')
-        column_widths = (30, 30, 300, 60, 60, 70, 30)
+        columns = ('refresh', 'days', 'title', 'size', 'odds', 'stake', 'url')
+        headers = (REFRESH_SYMBOL, 'Days', title, 'Size', 'Odds', 'Stake', 'URL')
+        column_widths = (30, 40, 300, 60, 60, 70, 70)
 
         # Create the table with the specified columns
         arb_table = ttk.Treeview(
@@ -126,10 +126,10 @@ class TkinterGUI:
                 parent='',
                 index=0,
                 iid=i,
-                tag=[i, 'oddrow' if i%2 else 'evenrow'],
+                tag=[i, am.market.PLATFORM_NAME, 'oddrow' if i%2 else 'evenrow'],
                 values=(
                     REFRESH_SYMBOL,
-                    am.market.PLATFORM_NAME,
+                    pretty_days(am.market),
                     am.market.title(),
                     am.market.size_string(),
                     pretty_percent(am, color=False),

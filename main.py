@@ -2,7 +2,6 @@
 import sys
 import os
 import yaml
-from datetime import datetime
 import argparse
 from arb import Arb
 

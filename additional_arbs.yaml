@@ -153,6 +153,7 @@
     YES_OPTION: "Donald Trump"
   - URL: https://futuur.com/q/155042/who-will-be-the-republican-presidential-nominee-in-the-us-elections-of-2024
     YES_OPTION: "Donald Trump"
+  - BOOST: 10
 
 - - TITLE: "2024 Republican Nominee: Ron DeSantis"
   - URL: https://www.metaculus.com/questions/6590
@@ -167,11 +168,13 @@
     YES_OPTION: "Ron DeSantis"
   - URL: https://futuur.com/q/155042/who-will-be-the-republican-presidential-nominee-in-the-us-elections-of-2024
     YES_OPTION: "Ron DeSantis"
+  - BOOST: 10
 
 - - TITLE: "2024 Republican Nominee: Glenn Youngkin"
   - URL: https://manifold.markets/jack/will-glenn-youngkin-be-the-2024-rep
   - URL: https://www.predictit.org/markets/detail/7053/Who-will-win-the-2024-Republican-presidential-nomination
     YES_OPTION: "Glenn Youngkin"
+  - BOOST: 10
 
 - - TITLE: "2024 Republican Nominee: Nikki Haley"
   - URL: https://www.metaculus.com/questions/11699
@@ -186,6 +189,7 @@
     YES_OPTION: "Nikki Haley"
   - URL: https://futuur.com/q/155042/who-will-be-the-republican-presidential-nominee-in-the-us-elections-of-2024
     YES_OPTION: "Nikki Haley"
+  - BOOST: 10
 
 - - TITLE: "2024 Republican Nominee: Mike Pence"
   - URL: https://www.metaculus.com/questions/7083
@@ -196,6 +200,7 @@
     YES_OPTION: "Mike Pence"
   - URL: https://www.predictit.org/markets/detail/7053/Who-will-win-the-2024-Republican-presidential-nomination
     YES_OPTION: "Mike Pence"
+  - BOOST: 10
 
 
 # Democrat nominee
@@ -212,6 +217,7 @@
     YES_OPTION: "Joe Biden"
   - URL: https://www.predictit.org/markets/detail/7057/Who-will-win-the-2024-Democratic-presidential-nomination
     YES_OPTION: "Joe Biden"
+  - BOOST: 10
 
 - - TITLE: "2024 Democrat Nominee: Gavin Newsom"
   - URL: https://futuur.com/q/155043/who-will-be-the-democratic-presidential-nominee-in-the-us-elections-of-2024
@@ -224,6 +230,7 @@
     YES_OPTION: "Gavin Newsom"
   - URL: https://www.predictit.org/markets/detail/7057/Who-will-win-the-2024-Democratic-presidential-nomination
     YES_OPTION: "Gavin Newsom"
+  - BOOST: 10
 
 - - TITLE: "2024 Democrat Nominee: Kamala Harris"
   - URL: https://futuur.com/q/155043/who-will-be-the-democratic-presidential-nominee-in-the-us-elections-of-2024
@@ -236,6 +243,7 @@
     YES_OPTION: "Kamala Harris"
   - URL: https://www.predictit.org/markets/detail/7057/Who-will-win-the-2024-Democratic-presidential-nomination
     YES_OPTION: "Kamala Harris"
+  - BOOST: 10
 
 - - TITLE: "2024 Democrat Nominee: Robert Kennedy Jr."
   - URL: https://www.metaculus.com/questions/16526
@@ -248,6 +256,7 @@
     YES_OPTION: "Robert F. Kennedy, Jr."
   - URL: https://www.predictit.org/markets/detail/7057/Who-will-win-the-2024-Democratic-presidential-nomination
     YES_OPTION: "Robert Kennedy Jr."
+  - BOOST: 10
 
 # 2024 president: Trump
 - - URL: https://www.metaculus.com/questions/5717
@@ -256,6 +265,7 @@
     YES_OPTION: Donald Trump
   - URL: https://www.predictit.org/markets/detail/7456/Who-will-win-the-2024-US-presidential-election
     YES_OPTION: Donald Trump
+  - BOOST: 10
 
 # Biden finish term
 - - TITLE: "Will Biden finish his first term?"
@@ -308,6 +318,7 @@
   - URL: https://manifold.markets/BoltonBailey/will-a-democrat-win-the-white-house
   - URL: https://manifold.markets/Gigacasting/will-a-democrat-win-the-2024-electi
   - URL: https://manifold.markets/SG/will-a-democrat-win-the-2024-us-pre
+  - BOOST: 10
 
 
 - - TITLE: Nuclear detonation before 2024?
