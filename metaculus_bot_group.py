@@ -28,7 +28,7 @@ class MetaculusBotGroup:
             return set([line.strip() for line in file.readlines() if not line.startswith("#")])
 
 
-    def filtered_metaculus_arb_pairs(platforms  = None):
+    def filtered_metaculus_arb_pairs(platforms  = None, status_callback = None):
         ignore_markets = MetaculusBotGroup.get_ignore_markets_from_file()
 
         # Filter to markets with lowercase class in platforms
@@ -38,22 +38,15 @@ class MetaculusBotGroup:
                 return []
 
         """Get a list of all markets"""
-        manifold_markets = [
-            Manifold(m["url"], market_id = m["id"])
-            for m in MetaculusBotGroup.metaculus_group_market_summaries()
-            if m["isResolved"] == False
-            and m["outcomeType"].startswith("BINARY")
-            and m["closeTime"] > int(time()) * 1000
-            and m["url"] not in ignore_markets
-        ]
+        yield_count = 0
+        summaries = MetaculusBotGroup.metaculus_group_market_summaries()
+        for i, m in enumerate(summaries):
+            if status_callback:
+                status_callback("Getting Manifold's Metaculus group market statuses: " + str(i) + "/" + str(len(summaries)))
+            if m["isResolved"] != False or not m["outcomeType"].startswith("BINARY") or m["closeTime"] < int(time()) * 1000 or m["url"] in ignore_markets:
+                continue
+            man_market = Manifold(m["url"], market_id = m["id"])
 
-        print("After filtering, " + str(len(manifold_markets)) + " markets remain in Metaculus group")
-
-        arbs = []
-
-        for man_market in manifold_markets:
-            # Print a . for each market
-            print(".", end="", flush=True)
             # Search for a Metaculus link in the description
             metaculus_link = MetaculusBotGroup.search_for_metaculus_link(man_market.details()["description"])
 
@@ -93,10 +86,11 @@ class MetaculusBotGroup:
                 print("Market has no probability: " + str(metaculus_market))
                 continue
 
-            arbs.append(Arb([man_market, metaculus_market]))
+            yield Arb([man_market, metaculus_market])
+            yield_count += 1
 
-        print("Returning " + str(len(arbs)) + " suitable arbs from Metaculus group")
-        return arbs
+        print("Yielded " + str(yield_count) + " suitable arbs from Metaculus group")
+        return
 
     # search recursively in 'description' for 'href': 'metaculus.com/questions/'
     # if found, return the 'href' value

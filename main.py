@@ -14,6 +14,7 @@ from metaculus_bot_group import MetaculusBotGroup
 from printing import print_arb
 from req import clear_cache, get
 from selenium_cache import clear_cache as clear_selenium_cache
+import itertools
 
 def sync(platforms):
     get_arbs_sorted_by_score(platforms)
@@ -40,7 +41,7 @@ def url_to_market(url, yes_option=None, no_option=None):
     else:
         raise Exception("Unknown URL: " + url)
 
-def arbs_from_yaml(platforms = None):
+def arbs_from_yaml(platforms = None, status_callback = None):
     """ Example entry in the list, note the optional YES/NO under each URL:
     - - URL: https://manifold.markets/ACXBot/9-will-a-nuclear-weapon-be-used-in
     - URL: https://www.metaculus.com/questions/13933/10-deaths-from-nuclear-detonation-in-2023/
@@ -52,13 +53,14 @@ def arbs_from_yaml(platforms = None):
     with open("additional_arbs.yaml", "r") as file:
         yaml_contents = yaml.load(file, Loader=yaml.FullLoader)
         # Create arbs, each arb having a list of markets
-        arbs = []
-        for arb in yaml_contents:
+        for i, arb in enumerate(yaml_contents):
             markets = []
             wiggles = []
             inverts = []
             boost = 0
             title = None
+            if status_callback:
+                status_callback("Getting arb " + str(i+1) + " of " + str(len(yaml_contents)) + " from yaml")
             for market_info in arb:
                 # Get the URL
                 if "BOOST" in market_info:
@@ -83,35 +85,38 @@ def arbs_from_yaml(platforms = None):
                 markets.append(market)
                 wiggles.append(wiggle)
                 inverts.append(invert)
-            arb = Arb(markets, wiggle_factors=wiggles, boost=boost, inverts=inverts, title=title)
-            arbs.append(arb)
-        return arbs
+            yield Arb(markets, wiggle_factors=wiggles, boost=boost, inverts=inverts, title=title)
+        return
 
-
-
-
-def get_arbs_sorted_by_score(platforms):
-    arbs = MetaculusBotGroup.filtered_metaculus_arb_pairs(platforms)
-    print(str(len(arbs)) + " valid market pairs found in Manifold's MetaculusBot group")
-    arbs += arbs_from_yaml(platforms)
-
-    # Filter to markets with lowercase class in platforms
-    if platforms:
-        for a in arbs:
-            for am in a.arb_markets():
-                if am.market.PLATFORM_NAME.lower() not in platforms:
-                    a.remove_market(am)
+ 
+def get_arbs_sorted_by_score(platforms, status_callback=None):
+    arbs = list(get_arbs_generator(platforms, status_callback=status_callback))
+    if status_callback:
+        status_callback("Sorting " + str(len(arbs)) + " arbs by score")
 
     # Sort markets by difference between manifold and metaculus probability
     arbs.sort(key=lambda arb: arb.score(), reverse=True)
 
-    # Print out the top ten with their urls and probabilities
-    for arb in arbs[:20]:
+    # Print out the top arbs with their urls and probabilities
+    for i, arb in enumerate(arbs[:20]):
+        if status_callback:
+            status_callback("Printing arb " + str(i+1) + " of top 20 to console")
         if (arb.score() <= 0):
             break
         print_arb(arb)
 
-    return arbs
+def get_arbs_generator(platforms, status_callback=None):
+    met_bot_arbs = MetaculusBotGroup.filtered_metaculus_arb_pairs(platforms, status_callback=status_callback)
+    yaml_arbs = arbs_from_yaml(platforms, status_callback=status_callback)
+
+    for a in itertools.chain(met_bot_arbs, yaml_arbs):
+        # Filter to markets with lowercase class in platforms
+        if platforms:
+            for am in a.arb_markets():
+                if am.market.PLATFORM_NAME.lower() not in platforms:
+                    a.remove_market(am)
+
+        yield a
 
 
 # For the main method, check arguments to see function to run

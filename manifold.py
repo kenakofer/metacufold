@@ -33,7 +33,7 @@ class Manifold(PredictionSite):
             try:
                 url = "https://manifold.markets/api/v0/slug/" + self._slug
                 if not self._summary:
-                    self._summary = requests.get("https://manifold.markets/api/v0/slug/" + self._slug).json()
+                    self._summary = requests.get(url).json()
                 self._market_id = str(self._summary['id'])
             except:
                 print("Error: Could not get market id for " + url)

@@ -258,14 +258,34 @@
     YES_OPTION: "Robert Kennedy Jr."
   - BOOST: 10
 
-# 2024 president: Trump
-- - URL: https://www.metaculus.com/questions/5717
+# 2024 president
+- - TITLE: Trump president 2024?
+  - URL: https://www.metaculus.com/questions/5717
   - URL: https://manifold.markets/duck/will-donald-trump-win-the-2024-pres
   - URL: https://manifold.markets/jack/who-will-win-2024-us-presidential-e
     YES_OPTION: Donald Trump
   - URL: https://www.predictit.org/markets/detail/7456/Who-will-win-the-2024-US-presidential-election
     YES_OPTION: Donald Trump
+  - URL: https://manifold.markets/jack/who-will-win-the-2024-us-presidenti-8c1c8b2f8964
+    YES_OPTION: Donald Trump
   - BOOST: 10
+
+- - TITLE: Biden president 2024?
+  - URL: https://www.metaculus.com/questions/10630
+  - URL: https://manifold.markets/AmmonLam/will-joe-biden-win-the-2024-us-pres-8952413770dd
+  - URL: https://manifold.markets/MartinRandall/will-joe-biden-win-the-2024-preside
+  - URL: https://manifold.markets/LarsDoucet/will-joe-biden-win-the-2024-us-pres
+  - URL: https://manifold.markets/AlexLiesman/will-joe-biden-be-reelected-in-2024
+  - URL: https://manifold.markets/KrishPatel/will-biden-win-the-2024-election
+  - URL: https://manifold.markets/levifinkelstein/will-joe-biden-win-the-2024-us-pres-548a4f39b079
+  - URL: https://manifold.markets/jack/who-will-win-2024-us-presidential-e
+    YES_OPTION: Joe Biden
+  - URL: https://www.predictit.org/markets/detail/7456/Who-will-win-the-2024-US-presidential-election
+    YES_OPTION: Joe Biden
+  - URL: https://manifold.markets/jack/who-will-win-the-2024-us-presidenti-8c1c8b2f8964
+    YES_OPTION: Joe Biden
+  - BOOST: 10
+
 
 # Biden finish term
 - - TITLE: "Will Biden finish his first term?"
@@ -330,3 +350,20 @@
   - URL: https://manifold.markets/jack/will-a-nuclear-weapon-be-detonated-af0ba4d66245
   - URL: https://www.metaculus.com/questions/13931/nuclear-detonation-in-2023/
   - BOOST: 10
+
+- - TITLE: "Republican Nominee Vice President: Tim Scott"
+  - URL: https://manifold.markets/BTE/will-tim-scott-be-the-gop-nominee-f-e9e1e50480f1
+  - URL: https://manifold.markets/Stralor/who-will-be-the-republican-nominee-8a36dedc6445
+    YES_OPTION: Tim Scott
+
+- - TITLE: "Republican Nominee Vice President: Kari Lake"
+  - URL: https://manifold.markets/YaakovSaxon/will-kari-lake-be-the-republican-vp
+  - URL: https://manifold.markets/Stralor/who-will-be-the-republican-nominee-8a36dedc6445
+    YES_OPTION: Kari Lake
+
+- - TITLE: "Republican Nominee Vice President: Nikki Haley"
+  - URL: https://manifold.markets/xyz/will-nikki-haley-be-the-republican-eb34948bde8a
+  - URL: https://manifold.markets/BTE/will-nikki-haley-be-the-gop-nominee
+    WIGGLE: .01
+  - URL: https://manifold.markets/Stralor/who-will-be-the-republican-nominee-8a36dedc6445
+    YES_OPTION: Nikki Haley

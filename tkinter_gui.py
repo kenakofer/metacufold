@@ -5,12 +5,13 @@ import tkinter as tk
 from tkinter import ttk
 from printing import pretty_percent, pretty_days
 import webbrowser
+import threading
 
 REFRESH_SYMBOL="↻ "
 
 class TkinterGUI:
     def __init__(self, arbs, platforms):
-        self.arbs = arbs
+        self.arb_list = []
         self.platforms = platforms
         self.root = tk.Tk()
         self.root.title("Arb Finder")
@@ -29,37 +30,62 @@ class TkinterGUI:
             foreground="white"
         )
 
-        self.create_arb_grid(arbs)
+        # Fix headings on Windows
+        s.theme_use("clam")
+
+        # Add a top row with a text box for filtering
+        top_row = tk.Frame(self.root)
+        top_row.pack(side=tk.TOP, fill=tk.X)
+        self.filter_text = tk.StringVar()
+        # self.filter_text.trace("w", lambda name, index, mode, sv=self.filter_text: self.filter_changed())
+        self.filter_entry = tk.Entry(top_row, textvariable=self.filter_text)
+        self.filter_entry.pack(side=tk.LEFT, fill=tk.X, expand=True)
+        self.filter_entry.focus_set()
+        self.filter_entry.bind('<Return>', lambda e: self.filter_changed())
+        self.filter_entry.bind('<Escape>', lambda e: self.filter_entry.delete(0, tk.END))
+
+
+        canvas, frame = TkinterGUI.setup_arb_list(arbs, self.root)
+        # Threading for populate_arb_list
+        threading.Thread(target=TkinterGUI.populate_arb_list, args=(self.arb_list, arbs, canvas, frame, self.root)).start()
+
         self.root.mainloop()
 
-    def create_arb_grid(self, arbs):
+    def filter_changed(self):
+        # For each word in the filter text, check if it is in the arb title. If any word is missing, hide the arb.table
+        filter_words = self.filter_text.get().lower().split()
+        for arb_table in self.arb_list:
+            if not filter_words or all(word in arb_table.arb.title().lower() for word in filter_words):
+                arb_table.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+            else:
+                arb_table.pack_forget()
+
+    def setup_arb_list(arbs, root):
         # Create a canvas for the arb grid
-        arb_grid_canvas = tk.Canvas(self.root)
-        arb_grid_canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        arb_list_canvas = tk.Canvas(root)
+        arb_list_canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         # Create a scrollbar for the arb grid
-        arb_grid_scrollbar = ttk.Scrollbar(self.root, orient=tk.VERTICAL, command=arb_grid_canvas.yview)
-        arb_grid_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        arb_list_scrollbar = ttk.Scrollbar(root, orient=tk.VERTICAL, command=arb_list_canvas.yview)
+        arb_list_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         # Configure the arb grid canvas
-        arb_grid_canvas.configure(yscrollcommand=arb_grid_scrollbar.set)
-        arb_grid_canvas.bind('<Configure>', lambda e: arb_grid_canvas.configure(scrollregion=arb_grid_canvas.bbox("all")))
+        arb_list_canvas.configure(yscrollcommand=arb_list_scrollbar.set)
+        arb_list_canvas.bind('<Configure>', lambda e: arb_list_canvas.configure(scrollregion=arb_list_canvas.bbox("all")))
         # Create a frame for the arb grid canvas
-        arb_grid_canvas_frame = tk.Frame(arb_grid_canvas)
-        arb_grid_canvas.create_window((0, 0), window=arb_grid_canvas_frame, anchor="nw")
+        arb_list_canvas_frame = tk.Frame(arb_list_canvas)
+        arb_list_canvas.create_window((0, 0), window=arb_list_canvas_frame, anchor="nw")
 
-        self.root.bind('<MouseWheel>', lambda e: arb_grid_canvas.yview_scroll(int(-1*e.delta/120), "units"))
-        self.root.bind('<Button-4>', lambda e: arb_grid_canvas.yview_scroll(-1, "units"))  # Linux and Windows
-        self.root.bind('<Button-5>', lambda e: arb_grid_canvas.yview_scroll(1, "units"))  # Linux and Windows
+        root.bind('<MouseWheel>', lambda e: arb_list_canvas.yview_scroll(int(-1*e.delta/120), "units"))
+        root.bind('<Button-4>', lambda e: arb_list_canvas.yview_scroll(-1, "units")) 
+        root.bind('<Button-5>', lambda e: arb_list_canvas.yview_scroll(1, "units"))
 
-        scroll_function = lambda e: print(e)
+        return arb_list_canvas, arb_list_canvas_frame
 
-        arb_tables = []
+    def populate_arb_list(arb_list, arbs, canvas, canvas_frame, root):
+        # Running the arbs generator is long running
         for arb in arbs:
-            arb_table = self.create_arb_table(arb.title(), arb_grid_canvas_frame)
-            TkinterGUI.repopulate_arb_table(arb_table, arb)
-            arb_table.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-
-        # Update scroll region now that the widgets are packed
-        arb_grid_canvas.configure(scrollregion=arb_grid_canvas.bbox("all"))
+            TkinterGUI.add_arb_table(arb, arb_list, canvas_frame)
+            # Update scroll region now that the widgets are packed
+            canvas.configure(scrollregion=canvas.bbox("all"))
 
     def activate_row(tree, event):
         row = tree.identify_row(event.y)
@@ -86,8 +112,22 @@ class TkinterGUI:
             TkinterGUI.repopulate_arb_table(tree, tree.arb)
 
 
+    def add_arb_table(arb, arb_list, arb_grid_canvas_frame):
+        arb_table = TkinterGUI.setup_table(arb.title(), arb_grid_canvas_frame)
+        arb_table.arb = arb
+        TkinterGUI.repopulate_arb_table(arb_table, arb)
+        # Insert the arb table such that the arb list stays sorted by arb_table.arb.score()
+        for i, arb_table2 in enumerate(arb_list):
+            if arb.score() > arb_table2.arb.score():
+                arb_list.insert(i, arb_table)
+                arb_table.pack(side=tk.TOP, fill=tk.BOTH, expand=True, before=arb_table2)
+                break
+        else:
+            arb_list.append(arb_table)
+            arb_table.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        return arb_table
 
-    def create_arb_table(self, title, arb_grid_canvas_frame):
+    def setup_table(title, arb_grid_canvas_frame):
         columns = ('refresh', 'days', 'title', 'size', 'odds', 'stake', 'url')
         headers = (REFRESH_SYMBOL, 'Days', title, 'Size', 'Odds', 'Stake', 'URL')
         column_widths = (30, 40, 300, 60, 60, 70, 70)
@@ -154,9 +194,9 @@ class TkinterGUI:
 
 
 if __name__ == '__main__':
-    from main import get_arbs_sorted_by_score
+    from main import get_arbs_generator
 
     platforms = ['metaculus', 'manifold']
-    arbs = get_arbs_sorted_by_score(platforms)
+    arbs = get_arbs_generator(platforms)
 
     gui = TkinterGUI(arbs, platforms)
