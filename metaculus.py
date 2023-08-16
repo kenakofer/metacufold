@@ -77,11 +77,11 @@ class Metaculus(PredictionSite):
 
     def user_position_shares(self, invalidate_cache=False, error_value=0):
         try:
-            if not self._user_position_shares:
+            if not self._user_position_shares or invalidate_cache:
                 url = 'https://www.metaculus.com/api2/predictions/?question=' + self._market_id + '&user=' + C.METACULUS_USER_ID
                 authorization_header = "Token " + C.METACULUS_API_KEY
                 headers = {'Authorization': authorization_header}
-                response_json = requests.get(url, headers=headers).json()
+                response_json = requests.get(url, invalidate_cache=invalidate_cache, headers=headers).json()
                 if len(response_json['results']) == 0 or len(response_json['results'][0]['predictions']) == 0:
                     self._user_position_shares = 0
                 else:
