@@ -8,11 +8,14 @@ import webbrowser
 import threading
 
 REFRESH_SYMBOL="↻ "
+PLATFORMS = ['metaculus', 'manifold']
 
 class TkinterGUI:
-    def __init__(self, arbs, platforms):
-        self.arb_list = []
+    def __init__(self, platforms = None):
+        if platforms is None:
+            platforms = PLATFORMS
         self.platforms = platforms
+
         self.root = tk.Tk()
         self.root.title("Arb Finder")
         self.root.geometry("1000x800")
@@ -44,6 +47,14 @@ class TkinterGUI:
         self.filter_entry.bind('<Return>', lambda e: self.filter_changed())
         self.filter_entry.bind('<Escape>', lambda e: self.filter_entry.delete(0, tk.END))
 
+        # Add a status bar label at the bottom
+        self.status_bar_label = tk.StringVar()
+        self.status_bar_label.set("Ready")
+        self.status_bar = tk.Label(self.root, textvariable=self.status_bar_label, bd=1, relief=tk.SUNKEN, anchor=tk.W)
+        self.status_bar.pack(side=tk.BOTTOM, fill=tk.X)
+
+        arbs = get_arbs_generator(self.platforms, status_callback=self.status_bar_label.set)
+        self.arb_list = []
 
         canvas, frame = TkinterGUI.setup_arb_list(arbs, self.root)
         # Threading for populate_arb_list
@@ -75,7 +86,7 @@ class TkinterGUI:
         arb_list_canvas.create_window((0, 0), window=arb_list_canvas_frame, anchor="nw")
 
         root.bind('<MouseWheel>', lambda e: arb_list_canvas.yview_scroll(int(-1*e.delta/120), "units"))
-        root.bind('<Button-4>', lambda e: arb_list_canvas.yview_scroll(-1, "units")) 
+        root.bind('<Button-4>', lambda e: arb_list_canvas.yview_scroll(-1, "units"))
         root.bind('<Button-5>', lambda e: arb_list_canvas.yview_scroll(1, "units"))
 
         return arb_list_canvas, arb_list_canvas_frame
@@ -196,7 +207,5 @@ class TkinterGUI:
 if __name__ == '__main__':
     from main import get_arbs_generator
 
-    platforms = ['metaculus', 'manifold']
-    arbs = get_arbs_generator(platforms)
 
-    gui = TkinterGUI(arbs, platforms)
+    TkinterGUI()

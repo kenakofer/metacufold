@@ -60,7 +60,7 @@ def arbs_from_yaml(platforms = None, status_callback = None):
             boost = 0
             title = None
             if status_callback:
-                status_callback("Getting arb " + str(i+1) + " of " + str(len(yaml_contents)) + " from yaml")
+                status_callback("Getting arbs from yaml: " + str(i+1) + "/" + str(len(yaml_contents)))
             for market_info in arb:
                 # Get the URL
                 if "BOOST" in market_info:
@@ -88,7 +88,7 @@ def arbs_from_yaml(platforms = None, status_callback = None):
             yield Arb(markets, wiggle_factors=wiggles, boost=boost, inverts=inverts, title=title)
         return
 
- 
+
 def get_arbs_sorted_by_score(platforms, status_callback=None):
     arbs = list(get_arbs_generator(platforms, status_callback=status_callback))
     if status_callback:
