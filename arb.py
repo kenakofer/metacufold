@@ -169,7 +169,7 @@ class ArbMarket:
             return Arb.ERROR_SYMBOL
         # Should be a number otherwise
         pos = round(pos)
-        if pos == 0:
+        if abs(pos) < 10:
             return ""
         return Arb.UP_SYMBOL + str(pos) if pos > 0 else Arb.DOWN_SYMBOL + str(-pos)
 
