@@ -106,10 +106,10 @@ def get_arbs_sorted_by_score(platforms, status_callback=None):
         print_arb(arb)
 
 def get_arbs_generator(platforms, status_callback=None):
-    met_bot_arbs = MetaculusBotGroup.filtered_metaculus_arb_pairs(platforms, status_callback=status_callback)
     yaml_arbs = arbs_from_yaml(platforms, status_callback=status_callback)
+    met_bot_arbs = MetaculusBotGroup.filtered_metaculus_arb_pairs(platforms, status_callback=status_callback)
 
-    for a in itertools.chain(met_bot_arbs, yaml_arbs):
+    for a in itertools.chain(yaml_arbs, met_bot_arbs):
         # Filter to markets with lowercase class in platforms
         if platforms:
             for am in a.arb_markets():

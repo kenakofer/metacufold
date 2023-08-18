@@ -268,6 +268,8 @@
     YES_OPTION: Donald Trump
   - URL: https://manifold.markets/jack/who-will-win-the-2024-us-presidenti-8c1c8b2f8964
     YES_OPTION: Donald Trump
+  - URL: https://manifold.markets/JonathanRay/who-will-be-elected-potus-in-2024
+    YES_OPTION: Trump
   - BOOST: 10
 
 - - TITLE: Biden president 2024?
@@ -284,6 +286,21 @@
     YES_OPTION: Joe Biden
   - URL: https://manifold.markets/jack/who-will-win-the-2024-us-presidenti-8c1c8b2f8964
     YES_OPTION: Joe Biden
+  - URL: https://manifold.markets/JonathanRay/who-will-be-elected-potus-in-2024
+    YES_OPTION: Biden
+  - BOOST: 10
+
+- - TITLE: DeSantis president 2024?
+  - URL: https://www.metaculus.com/questions/11714
+  - URL: https://www.predictit.org/markets/detail/7456/Who-will-win-the-2024-US-presidential-election
+    YES_OPTION: Ron DeSantis
+  - URL: https://manifold.markets/jack/will-ron-desantis-be-elected-us-pre
+  - URL: https://manifold.markets/jack/who-will-win-2024-us-presidential-e
+    YES_OPTION: Ron DeSantis
+  - URL: https://manifold.markets/jack/who-will-win-the-2024-us-presidenti-8c1c8b2f8964
+    YES_OPTION: Ron DeSantis
+  - URL: https://manifold.markets/JonathanRay/who-will-be-elected-potus-in-2024
+    YES_OPTION: DeSantis
   - BOOST: 10
 
 
@@ -369,3 +386,11 @@
     WIGGLE: .01
   - URL: https://manifold.markets/Stralor/who-will-be-the-republican-nominee-8a36dedc6445
     YES_OPTION: Nikki Haley
+
+- - TITLE: "US Government shutdown in 2023"
+  - URL: https://www.metaculus.com/questions/14557/us-government-shutdown-before-2024/
+  - URL: https://manifold.markets/EliGaultney/will-the-us-government-shut-down-on
+  - URL: https://manifold.markets/connorcash/will-there-be-a-us-government-shutd
+  - URL: https://manifold.markets/Nostradamnedus/will-there-be-a-us-government-shutd-26492e3c554d
+  - URL: https://manifold.markets/brwa/will-there-be-a-government-shutdown
+  - URL:
