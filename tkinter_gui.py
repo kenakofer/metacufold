@@ -9,6 +9,7 @@ import threading
 
 REFRESH_SYMBOL="↻ "
 PLATFORMS = ['metaculus', 'manifold']
+# PLATFORMS = []
 
 class TkinterGUI:
     def __init__(self, platforms = None):
@@ -141,7 +142,7 @@ class TkinterGUI:
     def setup_table(title, arb_grid_canvas_frame):
         columns = ('refresh', 'days', 'title', 'size', 'odds', 'stake', 'url')
         headers = (REFRESH_SYMBOL, 'Days', title, 'Size', 'Odds', 'Stake', 'URL')
-        column_widths = (30, 40, 300, 60, 60, 70, 70)
+        column_widths = (30, 40, 300, 60, 60, 70, 140)
 
         # Create the table with the specified columns
         arb_table = ttk.Treeview(
@@ -185,7 +186,7 @@ class TkinterGUI:
                     am.market.size_string(),
                     pretty_percent(am, color=False),
                     am.pretty_pos(),
-                    am.market.url()
+                    am.market.url().replace('https://', '').replace('www.', '')
                 )
             )
 

@@ -62,9 +62,6 @@
 - - URL: https://manifold.markets/ACXBot/20-will-there-be-any-change-in-the
   - URL: https://www.metaculus.com/questions/14181/us-supreme-court-change-in-2023/
   - URL: https://futuur.com/q/169059/will-there-be-any-change-in-the-composition-of-the-supreme-court-of-the-united-states-by-the-end-of-2023
-- - URL: https://manifold.markets/ACXBot/21-will-donald-trump-make-at-least
-  - URL: https://www.metaculus.com/questions/14182/realdonaldtrump-tweets-in-2023/
-  - URL: https://futuur.com/q/166933/will-trump-post-again-on-twitter-by-the-end-of-2023
 - - URL: https://manifold.markets/ACXBot/22-will-joe-biden-have-a-positive-a
   - URL: https://www.metaculus.com/questions/14252/joe-biden-approval-rating-jan-1-2024/
 - - URL: https://manifold.markets/ACXBot/25-will-rishi-sunak-be-prime-minist
@@ -151,6 +148,8 @@
     YES_OPTION: "Donald Trump"
   - URL: https://manifold.markets/Stralor/who-will-be-the-republican-presiden-98de0c6d37f0
     YES_OPTION: "Donald Trump"
+  - URL: https://manifold.markets/B/who-will-be-the-republican-nominee-610444650fed
+    YES_OPTION: "Donald Trump"
   - URL: https://futuur.com/q/155042/who-will-be-the-republican-presidential-nominee-in-the-us-elections-of-2024
     YES_OPTION: "Donald Trump"
   - BOOST: 10
@@ -166,8 +165,22 @@
     YES_OPTION: "Ron DeSantis"
   - URL: https://manifold.markets/Stralor/who-will-be-the-republican-presiden-98de0c6d37f0
     YES_OPTION: "Ron DeSantis"
+  - URL: https://manifold.markets/B/who-will-be-the-republican-nominee-610444650fed
+    YES_OPTION: "Ron DeSantis"
   - URL: https://futuur.com/q/155042/who-will-be-the-republican-presidential-nominee-in-the-us-elections-of-2024
     YES_OPTION: "Ron DeSantis"
+  - BOOST: 10
+
+- - TITLE: "2024 Republican Nominee: Vivek Ramaswamy"
+  - URL: https://www.metaculus.com/questions/15255
+  - URL: https://manifold.markets/AndrewG/who-will-be-the-republican-presiden-f919d704855c
+    YES_OPTION: "V. Ramaswamy"
+  - URL: https://www.predictit.org/markets/detail/7053/Who-will-win-the-2024-Republican-presidential-nomination
+    YES_OPTION: "Vivek Ramaswamy"
+  - URL: https://manifold.markets/Stralor/who-will-be-the-republican-presiden-98de0c6d37f0
+    YES_OPTION: "Vivek Ramaswamy"
+  - URL: https://manifold.markets/B/who-will-be-the-republican-nominee-610444650fed
+    YES_OPTION: "Vivek Ramaswamy"
   - BOOST: 10
 
 - - TITLE: "2024 Republican Nominee: Glenn Youngkin"
@@ -187,6 +200,8 @@
     YES_OPTION: "Nikki Haley"
   - URL: https://manifold.markets/Stralor/who-will-be-the-republican-presiden-98de0c6d37f0
     YES_OPTION: "Nikki Haley"
+  - URL: https://manifold.markets/B/who-will-be-the-republican-nominee-610444650fed
+    YES_OPTION: "Nikki Haley"
   - URL: https://futuur.com/q/155042/who-will-be-the-republican-presidential-nominee-in-the-us-elections-of-2024
     YES_OPTION: "Nikki Haley"
   - BOOST: 10
@@ -197,6 +212,8 @@
   - URL: https://manifold.markets/PC/who-will-be-the-republican-presiden-7bf11c066154
     YES_OPTION: "Mike Pence"
   - URL: https://manifold.markets/Stralor/who-will-be-the-republican-presiden-98de0c6d37f0
+    YES_OPTION: "Mike Pence"
+  - URL: https://manifold.markets/B/who-will-be-the-republican-nominee-610444650fed
     YES_OPTION: "Mike Pence"
   - URL: https://www.predictit.org/markets/detail/7053/Who-will-win-the-2024-Republican-presidential-nomination
     YES_OPTION: "Mike Pence"
@@ -215,6 +232,8 @@
     YES_OPTION: "Joe Biden"
   - URL: https://manifold.markets/Stralor/who-will-be-the-democratic-nominee-bc1bf10138e1
     YES_OPTION: "Joe Biden"
+  - URL: https://manifold.markets/B/who-will-be-be-the-democratic-party
+    YES_OPTION: "Joe Biden"
   - URL: https://www.predictit.org/markets/detail/7057/Who-will-win-the-2024-Democratic-presidential-nomination
     YES_OPTION: "Joe Biden"
   - BOOST: 10
@@ -227,6 +246,8 @@
   - URL: https://manifold.markets/MichaelWheatley/who-will-win-the-us-2024-democratic
     YES_OPTION: "Gavin Newsom"
   - URL: https://manifold.markets/Stralor/who-will-be-the-democratic-nominee-bc1bf10138e1
+    YES_OPTION: "Gavin Newsom"
+  - URL: https://manifold.markets/B/who-will-be-be-the-democratic-party
     YES_OPTION: "Gavin Newsom"
   - URL: https://www.predictit.org/markets/detail/7057/Who-will-win-the-2024-Democratic-presidential-nomination
     YES_OPTION: "Gavin Newsom"
@@ -242,6 +263,8 @@
   - URL: https://manifold.markets/Stralor/who-will-be-the-democratic-nominee-bc1bf10138e1
     YES_OPTION: "Kamala Harris"
   - URL: https://www.predictit.org/markets/detail/7057/Who-will-win-the-2024-Democratic-presidential-nomination
+    YES_OPTION: "Kamala Harris"
+  - URL: https://manifold.markets/B/who-will-be-be-the-democratic-party
     YES_OPTION: "Kamala Harris"
   - BOOST: 10
 
@@ -336,11 +359,6 @@
   - URL: https://www.metaculus.com/questions/14033/binance-bankruptcy-or-rescue-before-2024/
     WIGGLE: .04
 
-- - TITLE: "Will Hunter Biden be indicted before Nov 5, 2024"
-  - URL: https://manifold.markets/MetaculusBot/will-hunter-biden-be-indicted-befor-c928ea76a254
-  - URL: https://manifold.markets/dadonk/will-hunter-biden-be-indicted-befor
-  - URL: https://www.metaculus.com/questions/10541/hunter-biden-be-indicted-before-nov-5-2024/
-
 - - TITLE: Superconductor replication later
   - URL: https://manifold.markets/Lorenzo/will-we-have-the-first-roomtemperat
   - URL: https://manifold.markets/jack/will-the-room-temp-superconductor-p
@@ -393,4 +411,3 @@
   - URL: https://manifold.markets/connorcash/will-there-be-a-us-government-shutd
   - URL: https://manifold.markets/Nostradamnedus/will-there-be-a-us-government-shutd-26492e3c554d
   - URL: https://manifold.markets/brwa/will-there-be-a-government-shutdown
-  - URL:

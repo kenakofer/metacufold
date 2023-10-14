@@ -70,6 +70,8 @@ def arbs_from_yaml(platforms = None, status_callback = None):
                     title = market_info["TITLE"]
                     continue
                 url = market_info["URL"]
+                if not url:
+                    print("No URL found in market_info: " + str(market_info))
                 # Get the YES and NO options
                 yes = market_info.get("YES_OPTION", None)
                 no = market_info.get("NO_OPTION", None)
