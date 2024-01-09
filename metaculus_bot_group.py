@@ -7,7 +7,7 @@ import re
 
 class MetaculusBotGroup:
 
-    METACULUS_GROUP_MARKETS_URL = "https://manifold.markets/api/v0/group/by-id/5mFuwp5QX0sdZYdNq3Jx/markets"
+    METACULUS_GROUP_MARKETS_URL = "https://api.manifold.markets/v0/group/by-id/5mFuwp5QX0sdZYdNq3Jx/markets"
 
     def metaculus_group_market_summaries():
         """Get a list of all markets"""

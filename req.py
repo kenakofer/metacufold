@@ -8,10 +8,10 @@ if not os.path.exists("cache"):
 # Create the cache
 
 URLS_EXPIRE_AFTER = {
-    'manifold.markets/api/v0/group/by-id/': 3600 * 3,
-    'manifold.markets/api/v0/market/':      3600 * 3,
+    'api.manifold.markets/v0/group/by-id/': 3600 * 3,
+    'api.manifold.markets/v0/market/':      3600 * 3,
     'metaculus.com/api2/questions/':        3600 * 3,
-    'manifold.markets/api/v0/slug/':        3600 * 24 * 365,   # One year, since the slug is only used to grab the id, and the id shouldn't change
+    'api.manifold.markets/v0/slug/':        3600 * 24 * 365,   # One year, since the slug is only used to grab the id, and the id shouldn't change
     'futuur.com':                           3600 * 3,
     'api.futuur.com':                       3600 * 3,
 }

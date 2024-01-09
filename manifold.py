@@ -31,7 +31,7 @@ class Manifold(PredictionSite):
     def market_id(self):
         if not self._market_id:
             try:
-                url = "https://manifold.markets/api/v0/slug/" + self._slug
+                url = "https://api.manifold.markets/v0/slug/" + self._slug
                 if not self._summary:
                     self._summary = requests.get(url).json()
                 self._market_id = str(self._summary['id'])
@@ -42,13 +42,13 @@ class Manifold(PredictionSite):
 
     def details(self, invalidate_cache=False):
         if not self._details or invalidate_cache:
-            self._details = requests.get("https://manifold.markets/api/v0/market/" + self.market_id(), invalidate_cache=invalidate_cache).json()
+            self._details = requests.get("https://api.manifold.markets/v0/market/" + self.market_id(), invalidate_cache=invalidate_cache).json()
         return self._details
 
     def user_position_shares(self, invalidate_cache=False, error_value=0):
         try:
             if self._user_position == None or invalidate_cache:
-                url = f'https://manifold.markets/api/v0/bets?contractId={self.market_id()}&userId={C.MANIFOLD_USER_ID}'
+                url = f'https://api.manifold.markets/v0/bets?contractId={self.market_id()}&userId={C.MANIFOLD_USER_ID}'
                 user_bets = requests.get(url, invalidate_cache=invalidate_cache).json()
                 answer_id = self._get_yes_answer_id()
                 running_total = 0
